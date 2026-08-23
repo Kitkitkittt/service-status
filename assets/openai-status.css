@@ -311,32 +311,21 @@ main > div.f form input:checked + label {
 
 .live-status article > div {
   color: #6c6c6c;
-  font-size: 0;
+  font-size: 11px;
   white-space: nowrap;
-}
-
-.live-status article > div:first-of-type::after {
-  color: #777777;
-  content: " uptime";
-  font-size: 13px;
 }
 
 .live-status article > div:first-of-type .data {
   padding: 0;
   background: transparent !important;
   color: #444444;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 560;
 }
 
 .live-status article > div:last-child {
   display: block;
   color: #8a8a8a;
-  font-size: 0;
-}
-
-.live-status article > div:last-child::before {
-  content: "Latency ";
   font-size: 11px;
 }
 
@@ -445,7 +434,4 @@ footer a {
     font-size: 14px;
   }
 
-  .live-status article > div:first-of-type::after {
-    display: none;
-  }
 }
