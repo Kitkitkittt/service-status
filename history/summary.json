@@ -5,11 +5,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/9router.vnibb.xyz.ico",
     "slug": "9-router-web-ui",
     "status": "down",
-    "uptime": "96.13%",
-    "uptimeDay": "96.13%",
-    "uptimeWeek": "96.13%",
-    "uptimeMonth": "96.13%",
-    "uptimeYear": "96.13%",
+    "uptime": "94.05%",
+    "uptimeDay": "94.05%",
+    "uptimeWeek": "94.05%",
+    "uptimeMonth": "94.05%",
+    "uptimeYear": "94.05%",
     "time": 1472,
     "timeDay": 1472,
     "timeWeek": 1472,
@@ -43,19 +43,17 @@
     "icon": "https://icons.duckduckgo.com/ip3/9router.vnibb.xyz.ico",
     "slug": "9-router-api-auth-boundary",
     "status": "up",
-    "uptime": "7.08%",
-    "uptimeDay": "7.08%",
-    "uptimeWeek": "7.08%",
-    "uptimeMonth": "7.08%",
-    "uptimeYear": "7.08%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 486,
     "timeDay": 486,
     "timeWeek": 486,
     "timeMonth": 486,
     "timeYear": 486,
-    "dailyMinutesDown": {
-      "2026-08-23": 6
-    }
+    "dailyMinutesDown": {}
   },
   {
     "name": "Research Wiki Liveness",
@@ -99,19 +97,17 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-application-auth-boundary",
     "status": "up",
-    "uptime": "5.93%",
-    "uptimeDay": "5.93%",
-    "uptimeWeek": "5.93%",
-    "uptimeMonth": "5.93%",
-    "uptimeYear": "5.93%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 411,
     "timeDay": 411,
     "timeWeek": 411,
     "timeMonth": 411,
     "timeYear": 411,
-    "dailyMinutesDown": {
-      "2026-08-23": 5
-    }
+    "dailyMinutesDown": {}
   },
   {
     "name": "Research Wiki MCP Auth Boundary",
@@ -119,18 +115,16 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-mcp-auth-boundary",
     "status": "up",
-    "uptime": "5.49%",
-    "uptimeDay": "5.49%",
-    "uptimeWeek": "5.49%",
-    "uptimeMonth": "5.49%",
-    "uptimeYear": "5.49%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 264,
     "timeDay": 264,
     "timeWeek": 264,
     "timeMonth": 264,
     "timeYear": 264,
-    "dailyMinutesDown": {
-      "2026-08-23": 5
-    }
+    "dailyMinutesDown": {}
   }
 ]
