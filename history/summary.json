@@ -5,19 +5,17 @@
     "icon": "https://icons.duckduckgo.com/ip3/9router.vnibb.xyz.ico",
     "slug": "9-router-web-ui",
     "status": "up",
-    "uptime": "65.48%",
-    "uptimeDay": "65.48%",
-    "uptimeWeek": "65.48%",
-    "uptimeMonth": "65.48%",
-    "uptimeYear": "65.48%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 1527,
     "timeDay": 1527,
     "timeWeek": 1527,
     "timeMonth": 1527,
     "timeYear": 1527,
-    "dailyMinutesDown": {
-      "2026-08-23": 3
-    }
+    "dailyMinutesDown": {}
   },
   {
     "name": "9Router API Health",
