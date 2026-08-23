@@ -45,7 +45,7 @@ Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its ow
 
 ## Add or remove a service check
 
-Each entry needs a unique stable `name`, a public HTTPS `url`, an explicit `expectedStatusCode`, and a bounded `timeout`. Prefer semantic surfaces over duplicate root checks: liveness for process health, readiness for dependencies, and an anonymous protected route for authentication enforcement.
+Each entry needs a unique stable `name`, a public HTTPS `url`, an explicit `expectedStatusCodes` list, and a bounded `timeout`. Prefer semantic surfaces over duplicate root checks: liveness for process health, readiness for dependencies, and an anonymous protected route for authentication enforcement.
 
 Never place API keys, cookies, passwords, tunnel tokens, or Authorization headers in this public repository. If a future check truly requires authentication, use a least-privilege GitHub Actions secret and document its rotation separately without recording its value.
 

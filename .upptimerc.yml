@@ -4,31 +4,38 @@ repo: service-status
 sites:
   - name: 9Router Web UI
     url: https://9router.vnibb.xyz/
-    expectedStatusCode: 307
+    expectedStatusCodes:
+      - 307
     timeout: 15000
   - name: 9Router API Health
     url: https://9router.vnibb.xyz/api/health
-    expectedStatusCode: 200
+    expectedStatusCodes:
+      - 200
     timeout: 15000
   - name: 9Router API Auth Boundary
     url: https://9router.vnibb.xyz/v1/models
-    expectedStatusCode: 401
+    expectedStatusCodes:
+      - 401
     timeout: 15000
   - name: Research Wiki Liveness
     url: https://research.vnibb.xyz/health/live
-    expectedStatusCode: 200
+    expectedStatusCodes:
+      - 200
     timeout: 15000
   - name: Research Wiki Readiness
     url: https://research.vnibb.xyz/health/ready
-    expectedStatusCode: 200
+    expectedStatusCodes:
+      - 200
     timeout: 15000
   - name: Research Wiki Application Auth Boundary
     url: https://research.vnibb.xyz/
-    expectedStatusCode: 401
+    expectedStatusCodes:
+      - 401
     timeout: 15000
   - name: Research Wiki MCP Auth Boundary
     url: https://research.vnibb.xyz/mcp/research-brain/
-    expectedStatusCode: 401
+    expectedStatusCodes:
+      - 401
     timeout: 15000
 
 status-website:
