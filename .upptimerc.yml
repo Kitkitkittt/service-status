@@ -42,8 +42,9 @@ sites:
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  introTitle: "**VNI Services** public status"
-  introMessage: External checks for 9Router and Research Wiki. Protected routes are healthy when they reject anonymous requests with HTTP 401.
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css
+  introTitle: "System status"
+  introMessage: Live availability for 9Router and Research Wiki. Protected endpoints are operational when anonymous requests receive HTTP 401.
   navbar:
     - title: Status
       href: /service-status

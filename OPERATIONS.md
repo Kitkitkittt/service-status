@@ -34,6 +34,12 @@ curl -fsS http://127.0.0.1:8081/health/ready
 
 Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its own runner.
 
+## Status-page design
+
+`assets/openai-status.css` is the visual source of truth. `.upptimerc.yml` loads it through `status-website.themeUrl`. The design intentionally uses a narrow white canvas, restrained typography, one prominent overall-status banner, and compact component rows. Preserve Upptime's generated semantic HTML and accessibility; prefer CSS changes over custom JavaScript or a replacement frontend.
+
+After changing the stylesheet, push `master`, run `Static Site CI`, wait for the Pages deployment, then verify desktop and mobile layouts in a browser. Check the operational, degraded, active-incident, and history-page states before changing selectors that target `article.up`, `article.down`, `article.degraded`, or `.live-status`.
+
 ## Change a domain
 
 1. Confirm the new public domain resolves and its Cloudflare tunnel is active.
