@@ -46,7 +46,7 @@ status-website:
   introTitle: "System status"
   introMessage: Live availability for 9Router and Research Wiki. Protected endpoints are operational when anonymous requests receive HTTP 401.
   navbar:
-    - title: Status
+    - title: VNI Status
       href: /service-status
     - title: GitHub
       href: https://github.com/Kitkitkittt/service-status
