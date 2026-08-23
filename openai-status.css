@@ -17,6 +17,12 @@
   --change-background-color: transparent;
   --graph-opacity: 0;
   --graph-filter: none;
+  --status-up: var(--up-border-left-color);
+  --status-up-soft: #e5f5ee;
+  --status-down: var(--down-border-left-color);
+  --status-down-soft: #fbe6e6;
+  --status-degraded: var(--degraded-border-left-color);
+  --status-degraded-soft: #f8edd5;
 }
 
 * {
@@ -53,25 +59,18 @@ nav .container {
   align-items: center;
 }
 
-nav .container::before {
-  content: "VNI Status";
-  color: #111111;
-  font-size: 19px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-}
-
 nav ul {
   display: flex;
+  width: 100%;
   align-items: center;
   gap: 10px;
-  margin: 0 0 0 auto !important;
+  margin: 0 !important;
   padding: 0 !important;
   list-style: none;
 }
 
-nav li:first-child {
-  display: none;
+nav li:last-child {
+  margin-left: auto;
 }
 
 nav a {
@@ -86,6 +85,21 @@ nav a {
   font-weight: 550;
   text-decoration: none;
   transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+nav li:first-child a {
+  min-height: auto;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0;
+  color: #111111 !important;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+nav li:first-child a:hover {
+  background: transparent;
 }
 
 nav a:hover {
@@ -206,8 +220,10 @@ main > div.f form input:checked + label {
 .live-status article {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
   align-items: center;
-  gap: 20px;
+  column-gap: 20px;
+  row-gap: 1px;
   min-height: 70px;
   margin: 0 !important;
   padding: 18px 21px;
@@ -232,6 +248,7 @@ main > div.f form input:checked + label {
 .live-status h4 {
   display: flex;
   min-width: 0;
+  grid-row: 1 / span 2;
   align-items: center;
   margin: 0;
   color: #252525;
@@ -246,19 +263,38 @@ main > div.f form input:checked + label {
   flex: 0 0 auto;
   margin-right: 12px;
   border-radius: 50%;
-  background: #12845b;
-  box-shadow: 0 0 0 3px #e5f5ee;
+  background: var(--status-up);
+  box-shadow: 0 0 0 3px var(--status-up-soft);
   content: "";
 }
 
 .live-status article.down h4::before {
-  background: #c83c3c;
-  box-shadow: 0 0 0 3px #fbe6e6;
+  background: var(--status-down);
+  box-shadow: 0 0 0 3px var(--status-down-soft);
 }
 
 .live-status article.degraded h4::before {
-  background: #b7791f;
-  box-shadow: 0 0 0 3px #f8edd5;
+  background: var(--status-degraded);
+  box-shadow: 0 0 0 3px var(--status-degraded-soft);
+}
+
+.live-status h4::after {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  color: var(--status-up);
+  content: "Up";
+  font-size: 11px;
+  font-weight: 560;
+}
+
+.live-status article.down h4::after {
+  color: var(--status-down);
+  content: "Outage";
+}
+
+.live-status article.degraded h4::after {
+  color: var(--status-degraded);
+  content: "Degraded";
 }
 
 .live-status h4 .icon {
@@ -294,12 +330,68 @@ main > div.f form input:checked + label {
 }
 
 .live-status article > div:last-child {
-  display: none;
+  display: block;
+  color: #8a8a8a;
+  font-size: 0;
+}
+
+.live-status article > div:last-child::before {
+  content: "Latency ";
+  font-size: 11px;
+}
+
+.live-status article > div:last-child .data {
+  padding: 0;
+  background: transparent !important;
+  color: #8a8a8a;
+  font-size: 11px;
 }
 
 main > section:not(.live-status) article,
 main > section:not(.live-status) h3 {
   border-radius: 10px;
+}
+
+main > section:not(.live-status) h1 {
+  margin: 0 0 24px;
+  color: #171717;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 540;
+  letter-spacing: -0.035em;
+}
+
+main > section:not(.live-status) h1 a {
+  text-decoration: none;
+}
+
+main > section:not(.live-status) dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 28px;
+  margin: 0 0 48px;
+  padding: 22px 24px;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+}
+
+main > section:not(.live-status) dt {
+  color: #777777;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+main > section:not(.live-status) dd {
+  margin: 0;
+  color: #222222;
+  font-size: 20px;
+  font-weight: 560;
+}
+
+main > section:not(.live-status) h2 {
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
 }
 
 footer {
