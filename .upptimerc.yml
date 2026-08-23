@@ -39,10 +39,6 @@ sites:
       - 401
     timeout: 15000
 
-i18n:
-  overallUptime: "$UPTIME uptime"
-  averageResponseTime: "$TIME latency"
-
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
