@@ -5,6 +5,7 @@ sites:
   - name: 9Router Web UI
     url: https://9router.vnibb.xyz/
     expectedStatusCodes:
+      - 200
       - 307
     timeout: 15000
   - name: 9Router API Health
