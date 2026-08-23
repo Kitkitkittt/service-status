@@ -42,7 +42,7 @@ sites:
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=877cd7c
   introTitle: "System status"
   introMessage: Live availability for 9Router and Research Wiki. Protected endpoints are operational when anonymous requests receive HTTP 401.
   navbar:
