@@ -323,17 +323,56 @@ main > div.f form input:checked + label {
   font-weight: 560;
 }
 
-.live-status article > div:last-child {
+.live-status article > div:nth-of-type(2) {
   display: block;
   color: #8a8a8a;
   font-size: 11px;
 }
 
-.live-status article > div:last-child .data {
+.live-status article > div:nth-of-type(2) .data {
   padding: 0;
   background: transparent !important;
   color: #8a8a8a;
   font-size: 11px;
+}
+
+.live-status article > .uptime-strip {
+  width: 100%;
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  line-height: 0;
+  white-space: normal;
+}
+
+.uptime-strip svg {
+  display: block;
+  width: 100%;
+  height: 16px;
+  overflow: visible;
+}
+
+.uptime-strip__pill {
+  transition: opacity 120ms ease;
+}
+
+.uptime-strip__pill:hover {
+  opacity: 0.72;
+}
+
+.uptime-strip__pill--operational {
+  fill: var(--status-up);
+}
+
+.uptime-strip__pill--partial-outage {
+  fill: var(--status-degraded);
+}
+
+.uptime-strip__pill--full-outage {
+  fill: var(--status-down);
+}
+
+.uptime-strip__pill--unknown {
+  fill: #dddddd;
 }
 
 main > section:not(.live-status) article,
