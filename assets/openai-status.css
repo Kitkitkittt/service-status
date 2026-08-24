@@ -193,6 +193,13 @@ main > div.f form {
   background: #f7f7f7;
 }
 
+#data_day,
+#data_day + label,
+#data_week,
+#data_week + label {
+  display: none;
+}
+
 main > div.f form label {
   display: block;
   margin: 0 !important;

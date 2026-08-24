@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This public Upptime repository monitors externally observable service surfaces across Kohnnn projects. GitHub Actions checks them every five minutes, records response history in Git, opens and closes incident Issues, and publishes a GitHub Pages status site.
+This public Upptime repository monitors externally observable service surfaces across Kohnnn projects. GitHub Actions checks them every four hours, records response history in Git, opens and closes incident Issues, and publishes a GitHub Pages status site.
 
 `.upptimerc.yml` is the configuration source of truth. Files under `.github/workflows/`, `api/`, `graphs/`, and `history/`, plus the generated status table in `README.md`, are Upptime outputs.
 
@@ -45,7 +45,7 @@ Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its ow
 
 `assets/openai-status.css` is the visual source of truth. `.upptimerc.yml` loads it through `status-website.themeUrl`. The design intentionally uses a narrow white canvas, restrained typography, one prominent overall-status banner, and compact component rows. Preserve Upptime's generated semantic HTML and accessibility; prefer CSS changes over custom JavaScript or a replacement frontend.
 
-`assets/uptime-bars.js` is the data-driven exception. It groups generated component articles into native expandable product sections, reads Upptime's public `history/summary.json` and per-service `startTime`, then renders daily states for products and components over the selected 24-hour, 7-day, 30-day, 1-year, or all-time range. Keep VNIBB, Gampo, Research Wiki, and 9Router before the collapsed Other projects group. Primary groups with an outage must open automatically; Other projects stays collapsed by default while showing its aggregate status. Keep pre-monitoring days gray; never represent missing history as operational. Upptime records operational and outage time, not latency degradation, so the strip must not infer degraded states from response time.
+`assets/uptime-bars.js` is the data-driven exception. It groups generated component articles into native expandable product sections, reads Upptime's public `history/summary.json` and per-service `startTime`, then renders daily states for products and components over the selected 30-day, 1-year, or all-time range. Keep VNIBB, Gampo, Research Wiki, and 9Router before the collapsed Other projects group. Primary groups with an outage must open automatically; Other projects stays collapsed by default while showing its aggregate status. Keep pre-monitoring days gray; never represent missing history as operational. Upptime records operational and outage time, not latency degradation, so the strip must not infer degraded states from response time.
 
 After changing the stylesheet or uptime-bar script, push `master`, run `Static Site CI`, wait for the Pages deployment, then verify desktop and mobile layouts in a browser. Check the operational, degraded, active-incident, and history-page states before changing selectors that target `article.up`, `article.down`, `article.degraded`, or `.live-status`.
 

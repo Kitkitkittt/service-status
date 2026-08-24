@@ -1,6 +1,9 @@
 owner: Kitkitkittt
 repo: service-status
 
+workflowSchedule:
+  uptime: "0 */4 * * *"
+
 sites:
   - name: VNIBB Dashboard
     url: https://vnibb-web.vercel.app/dashboard
@@ -77,9 +80,9 @@ sites:
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=service-groups-1
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=daily-ranges-3
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=period-ranges-2
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=daily-ranges-3
       async: true
   introTitle: "System status"
   introMessage: Live availability across VNIBB, Gampo, Research Wiki, 9Router, and other public projects. Protected endpoints are operational when anonymous requests receive HTTP 401.
