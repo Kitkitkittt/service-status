@@ -3,7 +3,6 @@
   const DAY_COUNT = 90;
   const SVG_WIDTH = 668;
   const SVG_HEIGHT = 16;
-  const PILL_WIDTH = 5;
   const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
   const DATA_BASE_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/master/";
   const SERVICE_GROUPS = [
@@ -55,6 +54,25 @@
     return Array.from({ length: count }, (_, index) =>
       dateKey(new Date(end - (count - index - 1) * DAY_MS)),
     );
+  }
+
+  function periodDays(period, earliestStartDay = "", today = new Date()) {
+    const fixedDays = { day: 1, week: 7, month: 30, year: 365 };
+    if (fixedDays[period]) return fixedDays[period];
+    if (period !== "all" || !earliestStartDay) return DAY_COUNT;
+    const start = new Date(`${earliestStartDay}T00:00:00Z`);
+    const end = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+    return Math.max(1, Math.floor((end - start.getTime()) / DAY_MS) + 1);
+  }
+
+  function periodLabel(period, startDay = "") {
+    if (period === "all") return startDay ? "All-time history" : "Available history";
+    return {
+      day: "24-hour history",
+      week: "7-day history",
+      month: "30-day history",
+      year: "1-year history",
+    }[period] || "90-day history";
   }
 
   function dayState(day, startDay, summary, today) {
@@ -120,7 +138,8 @@
     const meta = element("span", "uptime-strip__meta");
     const svg = document.createElementNS(SVG_NAMESPACE, "svg");
     const axis = element("span", "uptime-strip__axis");
-    const step = (SVG_WIDTH - PILL_WIDTH) / (days.length - 1);
+    const step = SVG_WIDTH / days.length;
+    const pillWidth = Math.max(0.8, step - Math.min(2, step * 0.3));
 
     meta.append(
       element("span", "uptime-strip__label", label),
@@ -146,7 +165,7 @@
       const title = document.createElementNS(SVG_NAMESPACE, "title");
       rect.setAttribute("x", String(index * step));
       rect.setAttribute("y", "0");
-      rect.setAttribute("width", String(PILL_WIDTH));
+      rect.setAttribute("width", String(pillWidth));
       rect.setAttribute("height", String(SVG_HEIGHT));
       rect.setAttribute("rx", "1");
       rect.setAttribute("ry", "1");
@@ -166,9 +185,9 @@
     return days.map((day) => dayState(day, startDay, summary, today));
   }
 
-  function createBar(summary, startDay, today = new Date()) {
-    const days = buildDays(today);
-    return createBarFromStates(days, statesForSummary(summary, startDay, days), "90-day history");
+  function createBar(summary, startDay, period, today = new Date()) {
+    const days = buildDays(today, periodDays(period, startDay, today));
+    return createBarFromStates(days, statesForSummary(summary, startDay, days), periodLabel(period, startDay));
   }
 
   function groupStatus(articles) {
@@ -181,8 +200,11 @@
     return { className: "up", label: "Operational" };
   }
 
-  function createGroup(group, articles, summaries, starts, openGroups) {
-    const days = buildDays(new Date());
+  function createGroup(group, articles, summaries, starts, openGroups, period) {
+    const today = new Date();
+    const startDays = articles.map((article) => starts.get(slugFromArticle(article)) || "").filter(Boolean);
+    const earliestStartDay = startDays.sort()[0] || "";
+    const days = buildDays(today, periodDays(period, earliestStartDay, today));
     const details = element("details", `service-group ${group.secondary ? "service-group--secondary" : "service-group--primary"}`);
     const summary = element("summary", "service-group__summary");
     const identity = element("span", "service-group__identity");
@@ -207,14 +229,14 @@
     const aggregateStates = days.map((_, index) =>
       aggregateState(componentStates.map((states) => states[index])),
     );
-    summary.append(createBarFromStates(days, aggregateStates, "Combined 90-day history"));
+    summary.append(createBarFromStates(days, aggregateStates, `Combined ${periodLabel(period, earliestStartDay).toLowerCase()}`));
 
     articles.forEach((article) => components.appendChild(article));
     details.append(summary, components);
     return details;
   }
 
-  function groupArticles(articles, summaries = new Map(), starts = new Map()) {
+  function groupArticles(articles, summaries = new Map(), starts = new Map(), period = "week") {
     const section = document.querySelector(".live-status");
     if (!section) return;
     const openGroups = new Set(
@@ -230,7 +252,7 @@
     SERVICE_GROUPS.forEach((group) => {
       const groupedArticles = articlesByGroup.get(group.key);
       if (groupedArticles.length) {
-        fragment.appendChild(createGroup(group, groupedArticles, summaries, starts, openGroups));
+        fragment.appendChild(createGroup(group, groupedArticles, summaries, starts, openGroups, period));
       }
     });
     section.replaceChildren(fragment);
@@ -243,6 +265,8 @@
     dayState,
     groupForSlug,
     incidentFreePercent,
+    periodDays,
+    periodLabel,
     startDayFromHistory,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = exported;
@@ -250,6 +274,7 @@
 
   let dataPromise;
   let rendering = false;
+  let rerenderRequested = false;
 
   function loadData() {
     if (dataPromise) return dataPromise;
@@ -275,47 +300,63 @@
   }
 
   async function render() {
-    if (rendering) return;
+    if (rendering) {
+      rerenderRequested = true;
+      return;
+    }
+    const section = document.querySelector(".live-status");
     const articles = [...document.querySelectorAll(".live-status article")];
-    if (!articles.length) return;
+    if (!section || !articles.length) return;
+    const period = document.querySelector('input[name="d"]:checked')?.value || "week";
+    const periodChanged = section.dataset.period !== period;
+    if (periodChanged) articles.forEach((article) => article.querySelector(".uptime-strip")?.remove());
     const needsBars = articles.some((article) => !article.querySelector(".uptime-strip"));
     const needsGrouping = articles.some((article) => !article.closest(".service-group"));
-    if (!needsBars && !needsGrouping) return;
+    if (!needsBars && !needsGrouping && !periodChanged) return;
 
     rendering = true;
-    groupArticles(articles);
+    groupArticles(articles, new Map(), new Map(), period);
     try {
       const { summaries, starts } = await loadData();
       articles.forEach((article) => {
         const slug = slugFromArticle(article);
         const serviceSummary = summaries.get(slug);
         if (!article.querySelector(".uptime-strip")) {
+          const startDay = starts.get(slug) || "";
+          const days = buildDays(new Date(), periodDays(period, startDay));
           article.appendChild(
             serviceSummary
-              ? createBar(serviceSummary, starts.get(slug) || "")
-              : createBarFromStates(buildDays(new Date()), Array(DAY_COUNT).fill("unknown"), "90-day history"),
+              ? createBar(serviceSummary, startDay, period)
+              : createBarFromStates(days, days.map(() => "unknown"), periodLabel(period, startDay)),
           );
         }
       });
-      groupArticles(articles, summaries, starts);
+      groupArticles(articles, summaries, starts, period);
     } catch (error) {
       articles.forEach((article) => {
         if (!article.querySelector(".uptime-strip")) {
-          article.appendChild(
-            createBarFromStates(buildDays(new Date()), Array(DAY_COUNT).fill("unknown"), "90-day history"),
-          );
+          const days = buildDays(new Date(), periodDays(period));
+          article.appendChild(createBarFromStates(days, days.map(() => "unknown"), periodLabel(period)));
         }
       });
-      groupArticles(articles);
+      groupArticles(articles, new Map(), new Map(), period);
       console.error("Unable to render uptime history", error);
     } finally {
+      section.dataset.period = period;
       rendering = false;
+      if (rerenderRequested) {
+        rerenderRequested = false;
+        render();
+      }
     }
   }
 
   function start() {
     const observer = new MutationObserver(render);
     observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("change", (event) => {
+      if (event.target.matches('input[name="d"]')) render();
+    });
     render();
   }
 

@@ -79,7 +79,7 @@ status-website:
   name: VNI Services Status
   themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=service-groups-1
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=service-groups-1
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=period-ranges-2
       async: true
   introTitle: "System status"
   introMessage: Live availability across VNIBB, Gampo, Research Wiki, 9Router, and other public projects. Protected endpoints are operational when anonymous requests receive HTTP 401.

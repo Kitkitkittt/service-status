@@ -5,6 +5,8 @@ const {
   dayState,
   groupForSlug,
   incidentFreePercent,
+  periodDays,
+  periodLabel,
   startDayFromHistory,
 } = require("../assets/uptime-bars.js");
 
@@ -30,5 +32,13 @@ assert.equal(incidentFreePercent(["unknown"]), null);
 assert.equal(groupForSlug("vnibb-dashboard").title, "VNIBB");
 assert.equal(groupForSlug("research-wiki-readiness").title, "Research Wiki");
 assert.equal(groupForSlug("unconfigured-project").title, "Other projects");
+assert.equal(periodDays("day"), 1);
+assert.equal(periodDays("week"), 7);
+assert.equal(periodDays("month"), 30);
+assert.equal(periodDays("year"), 365);
+assert.equal(periodDays("all", "2025-08-20", new Date("2026-08-23T12:00:00Z")), 369);
+assert.equal(periodLabel("day"), "24-hour history");
+assert.equal(periodLabel("all"), "Available history");
+assert.equal(periodLabel("all", "2025-08-20"), "All-time history");
 
 console.log("uptime bar checks passed");
