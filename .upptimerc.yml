@@ -2,21 +2,15 @@ owner: Kitkitkittt
 repo: service-status
 
 sites:
-  - name: 9Router Web UI
-    url: https://9router.vnibb.xyz/
-    expectedStatusCodes:
-      - 200
-      - 307
-    timeout: 15000
-  - name: 9Router API Health
-    url: https://9router.vnibb.xyz/api/health
+  - name: VNIBB Dashboard
+    url: https://vnibb-web.vercel.app/dashboard
     expectedStatusCodes:
       - 200
     timeout: 15000
-  - name: 9Router API Auth Boundary
-    url: https://9router.vnibb.xyz/v1/models
+  - name: Gampo Simulator
+    url: https://gampo-educational-simulator.netlify.app
     expectedStatusCodes:
-      - 401
+      - 200
     timeout: 15000
   - name: Research Wiki Liveness
     url: https://research.vnibb.xyz/health/live
@@ -38,16 +32,57 @@ sites:
     expectedStatusCodes:
       - 401
     timeout: 15000
+  - name: 9Router Web UI
+    url: https://9router.vnibb.xyz/
+    expectedStatusCodes:
+      - 200
+      - 307
+    timeout: 15000
+  - name: 9Router API Health
+    url: https://9router.vnibb.xyz/api/health
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: 9Router API Auth Boundary
+    url: https://9router.vnibb.xyz/v1/models
+    expectedStatusCodes:
+      - 401
+    timeout: 15000
+  - name: Keith Digital Garden
+    url: https://kohnnn.github.io/keith-digital-garden/
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: Mechanical Watch Explainer
+    url: https://kohnnn.github.io/interactive-explanation/mechanical-watch/
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: AutoScientist Write-up
+    url: https://adaptions-writeup.vercel.app/
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: F1 Racing Demo
+    url: https://f1-demo.netlify.app/
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: Chords Lab
+    url: https://chords-lab-app.netlify.app/
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
 
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=uptime-bars-1
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=service-groups-1
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=1
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=service-groups-1
       async: true
   introTitle: "System status"
-  introMessage: Live availability for 9Router and Research Wiki. Protected endpoints are operational when anonymous requests receive HTTP 401.
+  introMessage: Live availability across VNIBB, Gampo, Research Wiki, 9Router, and other public projects. Protected endpoints are operational when anonymous requests receive HTTP 401.
   navbar:
     - title: VNI Status
       href: /service-status
