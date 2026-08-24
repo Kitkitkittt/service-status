@@ -57,7 +57,7 @@
   }
 
   function periodDays(period, earliestStartDay = "", today = new Date()) {
-    const fixedDays = { day: 1, week: 7, month: 30, year: 365 };
+    const fixedDays = { month: 30, year: 365 };
     if (fixedDays[period]) return fixedDays[period];
     if (period !== "all" || !earliestStartDay) return DAY_COUNT;
     const start = new Date(`${earliestStartDay}T00:00:00Z`);
@@ -68,8 +68,6 @@
   function periodLabel(period, startDay = "") {
     if (period === "all") return startDay ? "All-time history" : "Available history";
     return {
-      day: "24-hour history",
-      week: "7-day history",
       month: "30-day history",
       year: "1-year history",
     }[period] || "90-day history";
@@ -236,7 +234,7 @@
     return details;
   }
 
-  function groupArticles(articles, summaries = new Map(), starts = new Map(), period = "week") {
+  function groupArticles(articles, summaries = new Map(), starts = new Map(), period = "month") {
     const section = document.querySelector(".live-status");
     if (!section) return;
     const openGroups = new Set(
@@ -307,7 +305,8 @@
     const section = document.querySelector(".live-status");
     const articles = [...document.querySelectorAll(".live-status article")];
     if (!section || !articles.length) return;
-    const period = document.querySelector('input[name="d"]:checked')?.value || "week";
+    const selectedPeriod = document.querySelector('input[name="d"]:checked')?.value;
+    const period = selectedPeriod === "year" || selectedPeriod === "all" ? selectedPeriod : "month";
     const periodChanged = section.dataset.period !== period;
     if (periodChanged) articles.forEach((article) => article.querySelector(".uptime-strip")?.remove());
     const needsBars = articles.some((article) => !article.querySelector(".uptime-strip"));
@@ -357,7 +356,16 @@
     document.addEventListener("change", (event) => {
       if (event.target.matches('input[name="d"]')) render();
     });
-    render();
+    function selectDefaultPeriod() {
+      const month = document.querySelector("#data_month");
+      if (month && !document.querySelector('#data_year:checked, #data_all:checked')) {
+        month.click();
+      } else {
+        render();
+      }
+    }
+    selectDefaultPeriod();
+    window.setTimeout(selectDefaultPeriod, 0);
   }
 
   if (document.readyState === "loading") {
