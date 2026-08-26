@@ -58,18 +58,20 @@
     "url": "https://research.vnibb.xyz/health/ready",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-readiness",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
+    "uptimeDay": "99.99%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
-    "time": 2642,
-    "timeDay": 6087,
-    "timeWeek": 2642,
-    "timeMonth": 2642,
-    "timeYear": 2642,
-    "dailyMinutesDown": {}
+    "time": 3155,
+    "timeDay": 8210,
+    "timeWeek": 3155,
+    "timeMonth": 3155,
+    "timeYear": 3155,
+    "dailyMinutesDown": {
+      "2026-08-26": 0
+    }
   },
   {
     "name": "Research Wiki Application Auth Boundary",
