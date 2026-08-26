@@ -40,18 +40,20 @@
     "url": "https://research.vnibb.xyz/health/live",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-liveness",
-    "status": "up",
-    "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
-    "uptimeYear": "100.00%",
-    "time": 750,
-    "timeDay": 1874,
-    "timeWeek": 750,
-    "timeMonth": 750,
-    "timeYear": 750,
-    "dailyMinutesDown": {}
+    "status": "down",
+    "uptime": "99.98%",
+    "uptimeDay": "99.94%",
+    "uptimeWeek": "99.98%",
+    "uptimeMonth": "99.98%",
+    "uptimeYear": "99.98%",
+    "time": 741,
+    "timeDay": 1242,
+    "timeWeek": 741,
+    "timeMonth": 741,
+    "timeYear": 741,
+    "dailyMinutesDown": {
+      "2026-08-26": 1
+    }
   },
   {
     "name": "Research Wiki Readiness",
@@ -59,18 +61,18 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-readiness",
     "status": "down",
-    "uptime": "100.00%",
-    "uptimeDay": "99.99%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
-    "uptimeYear": "100.00%",
+    "uptime": "94.32%",
+    "uptimeDay": "83.15%",
+    "uptimeWeek": "94.32%",
+    "uptimeMonth": "94.32%",
+    "uptimeYear": "94.32%",
     "time": 3155,
     "timeDay": 8210,
     "timeWeek": 3155,
     "timeMonth": 3155,
     "timeYear": 3155,
     "dailyMinutesDown": {
-      "2026-08-26": 0
+      "2026-08-26": 243
     }
   },
   {
@@ -78,36 +80,40 @@
     "url": "https://research.vnibb.xyz/",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-application-auth-boundary",
-    "status": "up",
-    "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
-    "uptimeYear": "100.00%",
-    "time": 523,
-    "timeDay": 569,
-    "timeWeek": 523,
-    "timeMonth": 523,
-    "timeYear": 523,
-    "dailyMinutesDown": {}
+    "status": "down",
+    "uptime": "99.99%",
+    "uptimeDay": "99.97%",
+    "uptimeWeek": "99.99%",
+    "uptimeMonth": "99.99%",
+    "uptimeYear": "99.99%",
+    "time": 507,
+    "timeDay": 424,
+    "timeWeek": 507,
+    "timeMonth": 507,
+    "timeYear": 507,
+    "dailyMinutesDown": {
+      "2026-08-26": 0
+    }
   },
   {
     "name": "Research Wiki MCP Auth Boundary",
     "url": "https://research.vnibb.xyz/mcp/research-brain/",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-mcp-auth-boundary",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
-    "uptimeDay": "100.00%",
+    "uptimeDay": "99.99%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
-    "time": 374,
-    "timeDay": 562,
-    "timeWeek": 374,
-    "timeMonth": 374,
-    "timeYear": 374,
-    "dailyMinutesDown": {}
+    "time": 367,
+    "timeDay": 418,
+    "timeWeek": 367,
+    "timeMonth": 367,
+    "timeYear": 367,
+    "dailyMinutesDown": {
+      "2026-08-26": 0
+    }
   },
   {
     "name": "9Router Web UI",
