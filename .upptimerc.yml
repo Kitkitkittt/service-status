@@ -2,6 +2,8 @@ owner: Kitkitkittt
 repo: service-status
 
 workflowSchedule:
+  updateTemplate: "0 0 * * 1"
+  updates: "0 3 * * 1"
   uptime: "0 */4 * * *"
 
 sites:
