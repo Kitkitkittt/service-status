@@ -1,7 +1,7 @@
 url: https://research.vnibb.xyz/health/ready
-status: up
-code: 200
-responseTime: 791
-lastUpdated: 2026-09-06T00:33:09.337Z
+status: down
+code: 500
+responseTime: 671
+lastUpdated: 2026-09-06T14:43:19.031Z
 startTime: 2026-08-23T13:28:26.903Z
 generator: Upptime <https://github.com/upptime/upptime>
