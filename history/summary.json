@@ -12,7 +12,7 @@
     "uptimeYear": "100.00%",
     "time": 290,
     "timeDay": 349,
-    "timeWeek": 296,
+    "timeWeek": 306,
     "timeMonth": 306,
     "timeYear": 290,
     "dailyMinutesDown": {}
@@ -30,7 +30,7 @@
     "uptimeYear": "100.00%",
     "time": 771,
     "timeDay": 946,
-    "timeWeek": 765,
+    "timeWeek": 752,
     "timeMonth": 846,
     "timeYear": 771,
     "dailyMinutesDown": {}
@@ -40,16 +40,16 @@
     "url": "https://research.vnibb.xyz/health/live",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-liveness",
-    "status": "down",
-    "uptime": "51.77%",
-    "uptimeDay": "95.94%",
-    "uptimeWeek": "73.61%",
-    "uptimeMonth": "45.68%",
-    "uptimeYear": "51.77%",
+    "status": "up",
+    "uptime": "51.26%",
+    "uptimeDay": "39.33%",
+    "uptimeWeek": "65.52%",
+    "uptimeMonth": "43.85%",
+    "uptimeYear": "51.26%",
     "time": 676,
-    "timeDay": 820,
-    "timeWeek": 645,
-    "timeMonth": 629,
+    "timeDay": 778,
+    "timeWeek": 626,
+    "timeMonth": 626,
     "timeYear": 676,
     "dailyMinutesDown": {
       "2026-09-03": 1140,
@@ -87,7 +87,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 59
+      "2026-10-20": 874
     }
   },
   {
@@ -95,17 +95,17 @@
     "url": "https://research.vnibb.xyz/health/ready",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-readiness",
-    "status": "down",
-    "uptime": "40.10%",
-    "uptimeDay": "95.95%",
-    "uptimeWeek": "73.61%",
+    "status": "up",
+    "uptime": "39.71%",
+    "uptimeDay": "39.34%",
+    "uptimeWeek": "65.53%",
     "uptimeMonth": "25.11%",
-    "uptimeYear": "40.10%",
-    "time": 1152,
-    "timeDay": 770,
-    "timeWeek": 575,
-    "timeMonth": 548,
-    "timeYear": 1152,
+    "uptimeYear": "39.71%",
+    "time": 1146,
+    "timeDay": 726,
+    "timeWeek": 544,
+    "timeMonth": 551,
+    "timeYear": 1146,
     "dailyMinutesDown": {
       "2026-09-03": 1140,
       "2026-09-02": 1440,
@@ -147,7 +147,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 58
+      "2026-10-20": 874
     }
   },
   {
@@ -155,17 +155,17 @@
     "url": "https://research.vnibb.xyz/",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-application-auth-boundary",
-    "status": "down",
-    "uptime": "52.54%",
-    "uptimeDay": "95.97%",
-    "uptimeWeek": "73.62%",
-    "uptimeMonth": "45.69%",
-    "uptimeYear": "52.54%",
-    "time": 493,
-    "timeDay": 361,
-    "timeWeek": 463,
-    "timeMonth": 432,
-    "timeYear": 493,
+    "status": "up",
+    "uptime": "52.02%",
+    "uptimeDay": "39.35%",
+    "uptimeWeek": "65.53%",
+    "uptimeMonth": "43.85%",
+    "uptimeYear": "52.02%",
+    "time": 490,
+    "timeDay": 315,
+    "timeWeek": 394,
+    "timeMonth": 421,
+    "timeYear": 490,
     "dailyMinutesDown": {
       "2026-09-03": 507,
       "2026-09-02": 1440,
@@ -202,7 +202,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 58
+      "2026-10-20": 873
     }
   },
   {
@@ -210,17 +210,17 @@
     "url": "https://research.vnibb.xyz/mcp/research-brain/",
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-mcp-auth-boundary",
-    "status": "down",
-    "uptime": "52.02%",
-    "uptimeDay": "95.99%",
-    "uptimeWeek": "73.62%",
-    "uptimeMonth": "45.69%",
-    "uptimeYear": "52.02%",
-    "time": 469,
-    "timeDay": 394,
-    "timeWeek": 505,
-    "timeMonth": 458,
-    "timeYear": 469,
+    "status": "up",
+    "uptime": "51.52%",
+    "uptimeDay": "39.37%",
+    "uptimeWeek": "65.54%",
+    "uptimeMonth": "43.86%",
+    "uptimeYear": "51.52%",
+    "time": 467,
+    "timeDay": 335,
+    "timeWeek": 435,
+    "timeMonth": 448,
+    "timeYear": 467,
     "dailyMinutesDown": {
       "2026-09-03": 935,
       "2026-09-02": 1440,
@@ -257,7 +257,7 @@
       "2026-10-06": 561,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 58
+      "2026-10-20": 873
     }
   },
   {
@@ -273,7 +273,7 @@
     "uptimeYear": "100.00%",
     "time": 2213,
     "timeDay": 1544,
-    "timeWeek": 1853,
+    "timeWeek": 1747,
     "timeMonth": 2088,
     "timeYear": 2213,
     "dailyMinutesDown": {}
@@ -291,7 +291,7 @@
     "uptimeYear": "100.00%",
     "time": 607,
     "timeDay": 844,
-    "timeWeek": 637,
+    "timeWeek": 583,
     "timeMonth": 680,
     "timeYear": 607,
     "dailyMinutesDown": {}
@@ -309,7 +309,7 @@
     "uptimeYear": "100.00%",
     "time": 558,
     "timeDay": 377,
-    "timeWeek": 458,
+    "timeWeek": 375,
     "timeMonth": 583,
     "timeYear": 558,
     "dailyMinutesDown": {}
@@ -327,7 +327,7 @@
     "uptimeYear": "100.00%",
     "time": 159,
     "timeDay": 153,
-    "timeWeek": 175,
+    "timeWeek": 181,
     "timeMonth": 173,
     "timeYear": 159,
     "dailyMinutesDown": {}
@@ -345,7 +345,7 @@
     "uptimeYear": "100.00%",
     "time": 155,
     "timeDay": 141,
-    "timeWeek": 204,
+    "timeWeek": 190,
     "timeMonth": 158,
     "timeYear": 155,
     "dailyMinutesDown": {}
@@ -363,7 +363,7 @@
     "uptimeYear": "100.00%",
     "time": 187,
     "timeDay": 253,
-    "timeWeek": 193,
+    "timeWeek": 188,
     "timeMonth": 209,
     "timeYear": 187,
     "dailyMinutesDown": {}
@@ -381,7 +381,7 @@
     "uptimeYear": "100.00%",
     "time": 754,
     "timeDay": 809,
-    "timeWeek": 766,
+    "timeWeek": 755,
     "timeMonth": 820,
     "timeYear": 754,
     "dailyMinutesDown": {}
@@ -399,7 +399,7 @@
     "uptimeYear": "100.00%",
     "time": 651,
     "timeDay": 789,
-    "timeWeek": 733,
+    "timeWeek": 737,
     "timeMonth": 703,
     "timeYear": 651,
     "dailyMinutesDown": {}
