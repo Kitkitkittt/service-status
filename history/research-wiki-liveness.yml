@@ -1,7 +1,7 @@
 url: https://research.vnibb.xyz/health/live
-status: up
-code: 200
-responseTime: 646
-lastUpdated: 2026-10-19T00:47:21.115Z
+status: down
+code: 502
+responseTime: 820
+lastUpdated: 2026-10-20T01:33:54.432Z
 startTime: 2026-08-23T13:28:25.909Z
 generator: Upptime <https://github.com/upptime/upptime>
