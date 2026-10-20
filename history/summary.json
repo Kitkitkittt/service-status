@@ -41,11 +41,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-liveness",
     "status": "down",
-    "uptime": "51.80%",
-    "uptimeDay": "99.93%",
-    "uptimeWeek": "74.18%",
+    "uptime": "51.77%",
+    "uptimeDay": "95.94%",
+    "uptimeWeek": "73.61%",
     "uptimeMonth": "45.68%",
-    "uptimeYear": "51.80%",
+    "uptimeYear": "51.77%",
     "time": 676,
     "timeDay": 820,
     "timeWeek": 645,
@@ -87,7 +87,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 1
+      "2026-10-20": 59
     }
   },
   {
@@ -96,11 +96,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-readiness",
     "status": "down",
-    "uptime": "40.13%",
-    "uptimeDay": "99.95%",
-    "uptimeWeek": "74.19%",
+    "uptime": "40.10%",
+    "uptimeDay": "95.95%",
+    "uptimeWeek": "73.61%",
     "uptimeMonth": "25.11%",
-    "uptimeYear": "40.13%",
+    "uptimeYear": "40.10%",
     "time": 1152,
     "timeDay": 770,
     "timeWeek": 575,
@@ -147,7 +147,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 1
+      "2026-10-20": 58
     }
   },
   {
@@ -156,11 +156,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-application-auth-boundary",
     "status": "down",
-    "uptime": "52.57%",
-    "uptimeDay": "99.97%",
-    "uptimeWeek": "74.19%",
+    "uptime": "52.54%",
+    "uptimeDay": "95.97%",
+    "uptimeWeek": "73.62%",
     "uptimeMonth": "45.69%",
-    "uptimeYear": "52.57%",
+    "uptimeYear": "52.54%",
     "time": 493,
     "timeDay": 361,
     "timeWeek": 463,
@@ -202,7 +202,7 @@
       "2026-10-06": 562,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 0
+      "2026-10-20": 58
     }
   },
   {
@@ -211,11 +211,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/research.vnibb.xyz.ico",
     "slug": "research-wiki-mcp-auth-boundary",
     "status": "down",
-    "uptime": "52.06%",
-    "uptimeDay": "99.99%",
-    "uptimeWeek": "74.19%",
+    "uptime": "52.02%",
+    "uptimeDay": "95.99%",
+    "uptimeWeek": "73.62%",
     "uptimeMonth": "45.69%",
-    "uptimeYear": "52.06%",
+    "uptimeYear": "52.02%",
     "time": 469,
     "timeDay": 394,
     "timeWeek": 505,
@@ -257,7 +257,7 @@
       "2026-10-06": 561,
       "2026-10-17": 1315,
       "2026-10-16": 1286,
-      "2026-10-20": 0
+      "2026-10-20": 58
     }
   },
   {
