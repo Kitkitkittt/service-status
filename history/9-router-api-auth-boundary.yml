@@ -1,7 +1,7 @@
 url: https://9router.vnibb.xyz/v1/models
-status: up
-code: 401
-responseTime: 757
-lastUpdated: 2026-11-07T02:32:53.663Z
+status: down
+code: 502
+responseTime: 314
+lastUpdated: 2026-11-07T03:59:37.691Z
 startTime: 2026-08-23T13:28:10.895Z
 generator: Upptime <https://github.com/upptime/upptime>
