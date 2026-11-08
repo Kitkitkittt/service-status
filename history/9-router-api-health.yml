@@ -1,7 +1,7 @@
 url: https://9router.vnibb.xyz/api/health
-status: down
-code: 502
-responseTime: 444
-lastUpdated: 2026-11-08T02:03:08.088Z
+status: up
+code: 200
+responseTime: 841
+lastUpdated: 2026-11-08T10:57:57.270Z
 startTime: 2026-08-23T13:28:10.028Z
 generator: Upptime <https://github.com/upptime/upptime>
