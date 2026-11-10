@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This public Upptime repository monitors externally observable service surfaces across Kohnnn projects. GitHub Actions checks them every four hours, records response history in Git, opens and closes incident Issues, and publishes a GitHub Pages status site.
+This public Upptime repository monitors externally observable service surfaces across Kohnnn projects. GitHub Actions checks them every five minutes, starting at minute 2 of the hour (`2-59/5 * * * *` in `workflowSchedule.uptime`), records response history in Git, opens and closes incident Issues, and publishes a GitHub Pages status site.
+
+That interval is intended, not guaranteed: GitHub Actions can delay or drop scheduled runs, and [public schedules are disabled after 60 days of repository inactivity](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule), so a passing check is not a detection deadline.
 
 `.upptimerc.yml` is the configuration source of truth. Files under `.github/workflows/`, `api/`, `graphs/`, and `history/`, plus the generated status table in `README.md`, are Upptime outputs.
 
@@ -19,6 +21,7 @@ This public Upptime repository monitors externally observable service surfaces a
 | 9Router | `/` | 200 or 307 | Public tunnel reaches the UI or its redirect. |
 | 9Router | `/api/health` | 200 | Router API health surface is live. |
 | 9Router | `/v1/models` | 401 | Protected OpenAI-compatible API rejects anonymous access. |
+| Tele-proxy | `/api/health` | 200 | Anonymous constant `{"ok":true}` response proves the public gateway listener answers. It does not check providers, routing, storage, collectors, or traces. |
 | Keith Digital Garden | `https://kohnnn.github.io/keith-digital-garden/` | 200 | Public knowledge garden is available. |
 | Mechanical Watch | `https://kohnnn.github.io/interactive-explanation/mechanical-watch/` | 200 | Public interactive explainer is available. |
 | AutoScientist | `https://adaptions-writeup.vercel.app/` | 200 | Public project write-up is available. |
@@ -30,6 +33,8 @@ An expected 401 is a successful security check, not downtime. These checks requi
 ## Monitoring boundary
 
 GitHub-hosted runners can reach public domains only. They cannot observe localhost ports, systemd unit uptime, PostgreSQL clusters, or whether two local Research Wiki candidates are simultaneously active. Public readiness and protected-route checks are the external source of truth.
+
+A liveness check (Wiki `/health/live`, Tele-proxy `/api/health`) proves the process or listener answered; it says nothing about dependencies. A readiness check (Wiki `/health/ready`) proves declared dependencies passed. A protected-route check proves the auth boundary rejects anonymous requests. None of them substitutes for another, and Tele-proxy has no readiness or auth-boundary check here: `/api/health` is unconditional and `/v1/models` requires a key, so a Tele-proxy incident from this monitor is a listener/ingress failure, not an inference outage.
 
 For machine-local diagnosis, run:
 
@@ -93,6 +98,7 @@ curl -sS -o /dev/null -w '%{http_code}\n' https://research.vnibb.xyz/mcp/researc
 curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/
 curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/api/health
 curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/v1/models
+curl -sS -o /dev/null -w '%{http_code}\n' https://tele-proxy.vnibb.xyz/api/health
 curl -sS -o /dev/null -w '%{http_code}\n' https://kohnnn.github.io/keith-digital-garden/
 curl -sS -o /dev/null -w '%{http_code}\n' https://kohnnn.github.io/interactive-explanation/mechanical-watch/
 curl -sS -o /dev/null -w '%{http_code}\n' https://adaptions-writeup.vercel.app/
@@ -100,7 +106,7 @@ curl -sS -o /dev/null -w '%{http_code}\n' https://f1-demo.netlify.app/
 curl -sS -o /dev/null -w '%{http_code}\n' https://chords-lab-app.netlify.app/
 ```
 
-Expected codes are `200`, `200`, `200`, `200`, `401`, `401`, `200` or `307`, `200`, `401`, `200`, `200`, `200`, `200`, and `200` respectively.
+Expected codes are `200`, `200`, `200`, `200`, `401`, `401`, `200` or `307`, `200`, `401`, `200`, `200`, `200`, `200`, `200`, and `200` respectively.
 
 ## GitHub administration
 
