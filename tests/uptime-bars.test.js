@@ -5,9 +5,12 @@ const {
   dayState,
   groupForSlug,
   incidentFreePercent,
+  lastUpdatedFromHistory,
   periodDays,
   periodLabel,
   startDayFromHistory,
+  sampleFreshness,
+  groupStatus,
 } = require("../assets/uptime-bars.js");
 
 assert.deepEqual(buildDays(new Date("2026-08-23T23:59:59Z"), 3), [
@@ -32,6 +35,25 @@ assert.equal(incidentFreePercent(["unknown"]), null);
 assert.equal(groupForSlug("vnibb-dashboard").title, "VNIBB");
 assert.equal(groupForSlug("research-wiki-readiness").title, "Research Wiki");
 assert.equal(groupForSlug("unconfigured-project").title, "Other projects");
+assert.equal(groupForSlug("tele-proxy-api-health").title, "Tele-proxy");
+assert.equal(groupForSlug("grafana-api-health").title, "Grafana");
+assert.equal(groupForSlug("langfuse-readiness").title, "Langfuse");
+const now = new Date("2026-11-17T11:00:00Z");
+assert.equal(lastUpdatedFromHistory("lastUpdated: 2026-11-17T10:55:00Z\n"), "2026-11-17T10:55:00Z");
+assert.equal(sampleFreshness("2026-11-17T10:55:00Z", now).state, "fresh");
+assert.equal(sampleFreshness("2026-11-17T10:40:00Z", now).state, "fresh");
+assert.equal(sampleFreshness("2026-11-17T10:39:59Z", now).state, "stale");
+assert.equal(sampleFreshness("", now).state, "unknown");
+assert.equal(sampleFreshness("invalid", now).state, "unknown");
+assert.equal(sampleFreshness("2026-11-17T11:02:00Z", now).state, "unknown");
+assert.equal(sampleFreshness("2026-11-17T11:00:30Z", now).state, "fresh");
+assert.equal(dayState("2026-11-17", "2026-11-10", { lastUpdated: "2026-11-16T23:00:00Z", status: "up" }, "2026-11-17"), "unknown");
+const article = (state, status) => ({ dataset: { sampleState: state }, classList: { contains: (name) => name === status } });
+assert.equal(groupStatus([article("stale", "up")]).className, "unknown");
+assert.equal(groupStatus([article("fresh", "up"), article("unknown", "up")]).className, "unknown");
+assert.equal(groupStatus([article("fresh", "up"), article("fresh", "down")]).className, "down");
+assert.equal(groupStatus([article("fresh", "degraded")]).className, "degraded");
+assert.equal(groupStatus([article("fresh", "up")]).className, "up");
 assert.equal(periodDays("month"), 30);
 assert.equal(periodDays("year"), 365);
 assert.equal(periodDays("all", "2025-08-20", new Date("2026-08-23T12:00:00Z")), 369);

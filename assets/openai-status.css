@@ -343,6 +343,43 @@ main > div.f form input:checked + label {
   box-shadow: 0 0 0 3px var(--status-degraded-soft);
 }
 
+.service-group.unknown .service-group__status {
+  color: #695727;
+}
+
+.service-group.unknown .service-group__status::before {
+  background: #92752f;
+  box-shadow: 0 0 0 3px #f8edd5;
+}
+
+.monitoring-notice {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  color: #555;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.monitoring-notice--delayed {
+  border-color: #ead8b3;
+  background: #fff9ed;
+  color: #695727;
+}
+
+.sample-freshness {
+  margin: 8px 0 0;
+  color: #666;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+article[data-sample-state="stale"] .sample-freshness,
+article[data-sample-state="unknown"] .sample-freshness {
+  color: #795d20;
+}
+
 .service-group__summary > .uptime-strip {
   grid-column: 1 / -1;
   grid-row: 2;
