@@ -11,6 +11,8 @@ const {
   startDayFromHistory,
   sampleFreshness,
   groupStatus,
+  runCoversSite,
+  monitoringEvidence,
 } = require("../assets/uptime-bars.js");
 
 assert.deepEqual(buildDays(new Date("2026-08-23T23:59:59Z"), 3), [
@@ -54,6 +56,15 @@ assert.equal(groupStatus([article("fresh", "up"), article("unknown", "up")]).cla
 assert.equal(groupStatus([article("fresh", "up"), article("fresh", "down")]).className, "down");
 assert.equal(groupStatus([article("fresh", "degraded")]).className, "degraded");
 assert.equal(groupStatus([article("fresh", "up")]).className, "up");
+const runConfig = 'sites:\n  - name: Existing\n    url: https://example.com/\n  - name: Other\n    url: https://other.example.com/\n';
+assert.equal(runCoversSite(runConfig, "Existing", "https://example.com/"), true);
+assert.equal(runCoversSite(runConfig, "New endpoint", "https://example.com/"), false);
+assert.equal(runCoversSite(runConfig, "Existing", "https://other.example.com/"), false);
+// Unchanged healthy checks do not rewrite history; a covering successful run is newer evidence.
+assert.equal(monitoringEvidence("2026-11-16T23:00:00Z", "2026-11-17T10:55:00Z", true), "2026-11-17T10:55:00Z");
+assert.equal(monitoringEvidence("2026-11-16T23:00:00Z", "2026-11-17T10:55:00Z", false), "2026-11-16T23:00:00Z");
+assert.equal(monitoringEvidence("2026-11-17T10:59:00Z", "2026-11-17T10:55:00Z", true), "2026-11-17T10:59:00Z");
+assert.equal(monitoringEvidence("", "", true), "");
 assert.equal(periodDays("month"), 30);
 assert.equal(periodDays("year"), 365);
 assert.equal(periodDays("all", "2025-08-20", new Date("2026-08-23T12:00:00Z")), 369);
