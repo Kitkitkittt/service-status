@@ -4,6 +4,7 @@
   const SVG_WIDTH = 668;
   const SVG_HEIGHT = 16;
   const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+  const STALE_AFTER_MS = 20 * 60 * 1000;
   const DATA_BASE_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/master/";
   const SERVICE_GROUPS = [
     {
@@ -30,6 +31,21 @@
       key: "9router",
       title: "9Router",
       slugs: ["9-router-web-ui", "9-router-api-health", "9-router-api-auth-boundary"],
+    },
+    {
+      key: "tele-proxy",
+      title: "Tele-proxy",
+      slugs: ["tele-proxy-api-health", "tele-proxy-web-ui", "tele-proxy-api-auth-boundary"],
+    },
+    {
+      key: "grafana",
+      title: "Grafana",
+      slugs: ["grafana-api-health", "grafana-api-auth-boundary"],
+    },
+    {
+      key: "langfuse",
+      title: "Langfuse",
+      slugs: ["langfuse-liveness", "langfuse-readiness"],
     },
     {
       key: "other-projects",
@@ -75,6 +91,9 @@
 
   function dayState(day, startDay, summary, today) {
     if (!startDay || day < startDay) return "unknown";
+    // A stopped monitor cannot establish availability on subsequent days.
+    const sampled = new Date(summary.lastUpdated);
+    if (!Number.isNaN(sampled.getTime()) && day > dateKey(sampled)) return "unknown";
     const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
     if (minutesDown >= 1440) return "full-outage";
     if (minutesDown > 0 || (day === today && summary.status === "down")) return "partial-outage";
@@ -99,6 +118,23 @@
     if (!match) return "";
     const start = new Date(match[1].trim());
     return Number.isNaN(start.getTime()) ? "" : dateKey(start);
+  }
+
+  function lastUpdatedFromHistory(history) {
+    return history.match(/^lastUpdated:\s*(.+)$/m)?.[1].trim() || "";
+  }
+
+  function sampleFreshness(timestamp, now = new Date()) {
+    const sampled = new Date(timestamp).getTime();
+    const age = now.getTime() - sampled;
+    if (!Number.isFinite(sampled) || age < -60000) {
+      return { state: "unknown", label: "Check time unavailable" };
+    }
+    const minutes = Math.max(0, Math.floor(age / 60000));
+    return {
+      state: age > STALE_AFTER_MS ? "stale" : "fresh",
+      label: `Last checked ${minutes} min ago${age > STALE_AFTER_MS ? " · monitoring delayed" : ""}`,
+    };
   }
 
   function slugFromArticle(article) {
@@ -189,6 +225,9 @@
   }
 
   function groupStatus(articles) {
+    if (articles.some((article) => article.dataset.sampleState !== "fresh")) {
+      return { className: "unknown", label: "Awaiting fresh checks" };
+    }
     if (articles.some((article) => article.classList.contains("down"))) {
       return { className: "down", label: "Outage" };
     }
@@ -196,6 +235,48 @@
       return { className: "degraded", label: "Degraded" };
     }
     return { className: "up", label: "Operational" };
+  }
+
+  function refreshFreshness(articles, summaries, now = new Date()) {
+    let stale = 0;
+    let unknown = 0;
+    articles.forEach((article) => {
+      const timestamp = summaries.get(slugFromArticle(article))?.lastUpdated || "";
+      const freshness = sampleFreshness(timestamp, now);
+      article.dataset.sampleState = freshness.state;
+      if (freshness.state === "stale") stale += 1;
+      if (freshness.state === "unknown") unknown += 1;
+      let label = article.querySelector(".sample-freshness");
+      if (!label) {
+        label = element("p", "sample-freshness");
+        article.appendChild(label);
+      }
+      label.title = timestamp ? `Source sample: ${timestamp}` : "No verified check timestamp";
+      if (label.textContent !== freshness.label) label.textContent = freshness.label;
+    });
+
+    const section = document.querySelector(".live-status");
+    if (!section) return;
+    let notice = document.querySelector(".monitoring-notice");
+    if (!notice) {
+      notice = element("p", "monitoring-notice");
+      notice.setAttribute("role", "status");
+      section.before(notice);
+    }
+    const delayed = stale + unknown > 0;
+    notice.classList.toggle("monitoring-notice--delayed", delayed);
+    const message = delayed
+      ? `Current availability needs fresh checks: ${stale} delayed, ${unknown} without a valid sample time. Stored statuses and history below reflect earlier checks. Private node and worker health are not measured here.`
+      : `All ${articles.length} public checks sampled within 20 minutes. Private node and worker health are not measured here.`;
+    if (notice.textContent !== message) notice.textContent = message;
+
+    section.querySelectorAll(":scope > .service-group").forEach((details) => {
+      const status = groupStatus([...details.querySelectorAll("article")]);
+      details.classList.remove("up", "down", "degraded", "unknown");
+      details.classList.add(status.className);
+      const label = details.querySelector(".service-group__status");
+      if (label.textContent !== status.label) label.textContent = status.label;
+    });
   }
 
   function createGroup(group, articles, summaries, starts, openGroups, period) {
@@ -263,9 +344,12 @@
     dayState,
     groupForSlug,
     incidentFreePercent,
+    lastUpdatedFromHistory,
     periodDays,
     periodLabel,
     startDayFromHistory,
+    sampleFreshness,
+    groupStatus,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = exported;
   if (typeof document === "undefined") return;
@@ -273,6 +357,7 @@
   let dataPromise;
   let rendering = false;
   let rerenderRequested = false;
+  let currentSummaries = new Map();
 
   function loadData() {
     if (dataPromise) return dataPromise;
@@ -286,13 +371,18 @@
           summaries.map(async ({ slug }) => {
             try {
               const response = await fetch(`${DATA_BASE_URL}history/${slug}.yml`);
-              return [slug, response.ok ? startDayFromHistory(await response.text()) : ""];
+              const history = response.ok ? await response.text() : "";
+              return [slug, { startDay: startDayFromHistory(history), lastUpdated: lastUpdatedFromHistory(history) }];
             } catch {
-              return [slug, ""];
+              return [slug, { startDay: "", lastUpdated: "" }];
             }
           }),
         );
-        return { summaries: new Map(summaries.map((summary) => [summary.slug, summary])), starts: new Map(starts) };
+        const metadata = new Map(starts);
+        return {
+          summaries: new Map(summaries.map((summary) => [summary.slug, { ...summary, lastUpdated: metadata.get(summary.slug)?.lastUpdated || "" }])),
+          starts: new Map(starts.map(([slug, data]) => [slug, data.startDay])),
+        };
       });
     return dataPromise;
   }
@@ -314,9 +404,10 @@
     if (!needsBars && !needsGrouping && !periodChanged) return;
 
     rendering = true;
-    groupArticles(articles, new Map(), new Map(), period);
     try {
       const { summaries, starts } = await loadData();
+      currentSummaries = summaries;
+      refreshFreshness(articles, summaries);
       articles.forEach((article) => {
         const slug = slugFromArticle(article);
         const serviceSummary = summaries.get(slug);
@@ -332,6 +423,7 @@
       });
       groupArticles(articles, summaries, starts, period);
     } catch (error) {
+      refreshFreshness(articles, new Map());
       articles.forEach((article) => {
         if (!article.querySelector(".uptime-strip")) {
           const days = buildDays(new Date(), periodDays(period));
@@ -366,6 +458,9 @@
     }
     selectDefaultPeriod();
     window.setTimeout(selectDefaultPeriod, 0);
+    window.setInterval(() => {
+      refreshFreshness([...document.querySelectorAll(".live-status article")], currentSummaries);
+    }, 60000);
   }
 
   if (document.readyState === "loading") {

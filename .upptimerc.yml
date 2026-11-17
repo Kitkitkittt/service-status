@@ -58,6 +58,37 @@ sites:
     expectedStatusCodes:
       - 200
     timeout: 15000
+  - name: Tele-proxy Web UI
+    url: https://tele-proxy.vnibb.xyz/
+    expectedStatusCodes:
+      - 200
+      - 307
+    timeout: 15000
+  - name: Tele-proxy API Auth Boundary
+    url: https://tele-proxy.vnibb.xyz/v1/models
+    expectedStatusCodes:
+      - 401
+    timeout: 15000
+  - name: Grafana API Health
+    url: https://grafana.vnibb.xyz/api/health
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: Grafana API Auth Boundary
+    url: https://grafana.vnibb.xyz/api/datasources
+    expectedStatusCodes:
+      - 401
+    timeout: 15000
+  - name: Langfuse Liveness
+    url: https://langfuse.vnibb.xyz/api/public/health
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: Langfuse Readiness
+    url: https://langfuse.vnibb.xyz/api/public/ready
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
   - name: Keith Digital Garden
     url: https://kohnnn.github.io/keith-digital-garden/
     expectedStatusCodes:
@@ -87,14 +118,16 @@ sites:
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=daily-ranges-3
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=fabric-coverage-1
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=daily-ranges-3
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=fabric-coverage-1
       async: true
   introTitle: "System status"
-  introMessage: Live availability across VNIBB, Gampo, Research Wiki, 9Router, and other public projects. Protected endpoints are operational when anonymous requests receive HTTP 401.
+  introMessage: Public availability across applications, AI gateways, Grafana and Langfuse. Expected HTTP 401 means an authentication boundary passed. Checks target five-minute intervals; sample age is shown below. Private node, worker and telemetry health require separate authenticated monitoring.
   navbar:
     - title: VNI Status
       href: /service-status
     - title: GitHub
       href: https://github.com/Kitkitkittt/service-status
+    - title: Coverage
+      href: https://github.com/Kitkitkittt/service-status/blob/master/COVERAGE.md

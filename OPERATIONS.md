@@ -22,6 +22,12 @@ That interval is intended, not guaranteed: GitHub Actions can delay or drop sche
 | 9Router | `/api/health` | 200 | Router API health surface is live. |
 | 9Router | `/v1/models` | 401 | Protected OpenAI-compatible API rejects anonymous access. |
 | Tele-proxy | `/api/health` | 200 | Anonymous constant `{"ok":true}` response proves the public gateway listener answers. It does not check providers, routing, storage, collectors, or traces. |
+| Tele-proxy | `/` | 200 or 307 | Public UI or its redirect answers; not an authenticated workflow test. |
+| Tele-proxy | `/v1/models` | 401 | Protected API rejects an anonymous request; not a model/provider availability test. |
+| Grafana | `https://grafana.vnibb.xyz/api/health` | 200 | Grafana's health handler answers; not proof that every datasource, exporter or dashboard query works. |
+| Grafana | `/api/datasources` | 401 | Anonymous requests cannot list datasource configuration. |
+| Langfuse | `https://langfuse.vnibb.xyz/api/public/health` | 200 | Langfuse liveness handler answers; no trace-ingestion or completeness claim. |
+| Langfuse | `/api/public/ready` | 200 | Langfuse's declared readiness handler passes; no end-to-end producer/export/trace guarantee. |
 | Keith Digital Garden | `https://kohnnn.github.io/keith-digital-garden/` | 200 | Public knowledge garden is available. |
 | Mechanical Watch | `https://kohnnn.github.io/interactive-explanation/mechanical-watch/` | 200 | Public interactive explainer is available. |
 | AutoScientist | `https://adaptions-writeup.vercel.app/` | 200 | Public project write-up is available. |
@@ -34,7 +40,9 @@ An expected 401 is a successful security check, not downtime. These checks requi
 
 GitHub-hosted runners can reach public domains only. They cannot observe localhost ports, systemd unit uptime, PostgreSQL clusters, or whether two local Research Wiki candidates are simultaneously active. Public readiness and protected-route checks are the external source of truth.
 
-A liveness check (Wiki `/health/live`, Tele-proxy `/api/health`) proves the process or listener answered; it says nothing about dependencies. A readiness check (Wiki `/health/ready`) proves declared dependencies passed. A protected-route check proves the auth boundary rejects anonymous requests. None of them substitutes for another, and Tele-proxy has no readiness or auth-boundary check here: `/api/health` is unconditional and `/v1/models` requires a key, so a Tele-proxy incident from this monitor is a listener/ingress failure, not an inference outage.
+A liveness check (Wiki `/health/live`, Tele-proxy `/api/health`) proves the process or listener answered; it says nothing about dependencies. A readiness check (Wiki `/health/ready`, Langfuse `/api/public/ready`) tests the application's declared readiness. A protected-route check proves the selected route rejects anonymous requests. None substitutes for another. Tele-proxy's `/api/health` is unconditional; its `/v1/models` check intentionally sends no key. Neither proves inference works.
+
+[COVERAGE.md](COVERAGE.md) records the public/private coverage boundary and all seven expected Node Slots. Do not expose a private service merely to make this public dashboard look complete. The Fabric registry and authenticated telemetry remain authoritative for node resources, workers, private dependencies, backup evidence and admission.
 
 For machine-local diagnosis, run:
 
@@ -50,7 +58,9 @@ Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its ow
 
 `assets/openai-status.css` is the visual source of truth. `.upptimerc.yml` loads it through `status-website.themeUrl`. The design intentionally uses a narrow white canvas, restrained typography, one prominent overall-status banner, and compact component rows. Preserve Upptime's generated semantic HTML and accessibility; prefer CSS changes over custom JavaScript or a replacement frontend.
 
-`assets/uptime-bars.js` is the data-driven exception. It groups generated component articles into native expandable product sections, reads Upptime's public `history/summary.json` and per-service `startTime`, then renders daily states for products and components over the selected 30-day, 1-year, or all-time range. Keep VNIBB, Gampo, Research Wiki, and 9Router before the collapsed Other projects group. Primary groups with an outage must open automatically; Other projects stays collapsed by default while showing its aggregate status. Keep pre-monitoring days gray; never represent missing history as operational. Upptime records operational and outage time, not latency degradation, so the strip must not infer degraded states from response time.
+`assets/uptime-bars.js` is the data-driven exception. It groups generated component articles into native expandable product sections, reads Upptime's public `history/summary.json` and per-service `startTime`/`lastUpdated`, then renders daily states for products and components over the selected 30-day, 1-year, or all-time range. Keep VNIBB, Gampo, Research Wiki, 9Router, Tele-proxy, Grafana and Langfuse before the collapsed Other projects group. Primary groups with an outage or missing fresh evidence open automatically; Other projects stays collapsed by default. Keep pre-monitoring days and days after the last sample gray. Upptime records operational and outage time, not latency degradation, so the strip must not infer degraded states from response time.
+
+The page displays each check's source timestamp and age. Samples over 20 minutes old, invalid/missing timestamps, and clocks more than one minute ahead produce an explicit freshness warning and an unknown group status. This is a display threshold, not an outage declaration or alert-delivery guarantee. A one-minute browser timer ages the loaded samples; reload the page to obtain newer data. Historical incident totals remain recorded history. If GitHub schedules are delayed, investigate Actions and use the existing independent private monitor rather than equating old green samples with current availability.
 
 After changing the stylesheet or uptime-bar script, push `master`, run `Static Site CI`, wait for the Pages deployment, then verify desktop and mobile layouts in a browser. Check the operational, degraded, active-incident, and history-page states before changing selectors that target `article.up`, `article.down`, `article.degraded`, or `.live-status`.
 
@@ -106,7 +116,9 @@ curl -sS -o /dev/null -w '%{http_code}\n' https://f1-demo.netlify.app/
 curl -sS -o /dev/null -w '%{http_code}\n' https://chords-lab-app.netlify.app/
 ```
 
-Expected codes are `200`, `200`, `200`, `200`, `401`, `401`, `200` or `307`, `200`, `401`, `200`, `200`, `200`, `200`, `200`, and `200` respectively.
+The examples above cover the original fifteen checks. The complete, current probe list and expected codes are in `.upptimerc.yml`, including the six checks added on 17 November. Probe those too before publishing; use anonymous requests with a finite timeout and preserve their explicit status contracts.
+
+Run `node tests/uptime-bars.test.js` and `node --check assets/uptime-bars.js` after changing grouping or freshness behavior.
 
 ## GitHub administration
 
