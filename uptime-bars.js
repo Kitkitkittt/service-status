@@ -92,7 +92,7 @@
   function dayState(day, startDay, summary, today) {
     if (!startDay || day < startDay) return "unknown";
     // A stopped monitor cannot establish availability on subsequent days.
-    const sampled = new Date(summary.lastUpdated);
+    const sampled = new Date(summary.lastEvidenceAt || summary.lastUpdated);
     if (!Number.isNaN(sampled.getTime()) && day > dateKey(sampled)) return "unknown";
     const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
     if (minutesDown >= 1440) return "full-outage";
@@ -133,8 +133,25 @@
     const minutes = Math.max(0, Math.floor(age / 60000));
     return {
       state: age > STALE_AFTER_MS ? "stale" : "fresh",
-      label: `Last checked ${minutes} min ago${age > STALE_AFTER_MS ? " · monitoring delayed" : ""}`,
+      label: `Monitoring evidence ${minutes} min ago${age > STALE_AFTER_MS ? " · refresh to verify" : ""}`,
     };
+  }
+
+  function runCoversSite(config, name, url) {
+    // Accept the repository's literal YAML layout; unfamiliar formats fail closed.
+    return config.split(/^  - name: /m).slice(1).some((block) =>
+      block.split("\n")[0].trim() === name &&
+      block.match(/^    url: (.+)$/m)?.[1].trim() === url,
+    );
+  }
+
+  function monitoringEvidence(historyTime, runTime, coveredByRun) {
+    const historyMs = Date.parse(historyTime);
+    const runMs = coveredByRun ? Date.parse(runTime) : NaN;
+    if (Number.isFinite(runMs) && (!Number.isFinite(historyMs) || runMs > historyMs)) {
+      return runTime;
+    }
+    return historyTime;
   }
 
   function slugFromArticle(article) {
@@ -241,7 +258,8 @@
     let stale = 0;
     let unknown = 0;
     articles.forEach((article) => {
-      const timestamp = summaries.get(slugFromArticle(article))?.lastUpdated || "";
+      const summary = summaries.get(slugFromArticle(article));
+      const timestamp = summary?.lastEvidenceAt || "";
       const freshness = sampleFreshness(timestamp, now);
       article.dataset.sampleState = freshness.state;
       if (freshness.state === "stale") stale += 1;
@@ -251,7 +269,7 @@
         label = element("p", "sample-freshness");
         article.appendChild(label);
       }
-      label.title = timestamp ? `Source sample: ${timestamp}` : "No verified check timestamp";
+      label.title = timestamp ? `Latest evidence: ${timestamp}; saved history record: ${summary?.lastUpdated || "unavailable"}. Healthy checks do not rewrite history on every run.` : "No verified monitoring timestamp";
       if (label.textContent !== freshness.label) label.textContent = freshness.label;
     });
 
@@ -266,8 +284,8 @@
     const delayed = stale + unknown > 0;
     notice.classList.toggle("monitoring-notice--delayed", delayed);
     const message = delayed
-      ? `Current availability needs fresh checks: ${stale} delayed, ${unknown} without a valid sample time. Stored statuses and history below reflect earlier checks. Private node and worker health are not measured here.`
-      : `All ${articles.length} public checks sampled within 20 minutes. Private node and worker health are not measured here.`;
+      ? `Fresh monitoring evidence needed: ${stale} older than 20 minutes, ${unknown} unavailable. Reload to refresh. Saved history timestamps are not a workflow heartbeat. Private node and worker health are not measured here.`
+      : `All ${articles.length} public checks have monitoring evidence within 20 minutes. Freshness uses saved checks and successful monitor runs covering each endpoint. Private node and worker health are not measured here.`;
     if (notice.textContent !== message) notice.textContent = message;
 
     section.querySelectorAll(":scope > .service-group").forEach((details) => {
@@ -350,6 +368,8 @@
     startDayFromHistory,
     sampleFreshness,
     groupStatus,
+    runCoversSite,
+    monitoringEvidence,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = exported;
   if (typeof document === "undefined") return;
@@ -367,6 +387,18 @@
         return response.json();
       })
       .then(async (summaries) => {
+        const monitor = (async () => {
+          try {
+            const response = await fetch("https://api.github.com/repos/Kitkitkittt/service-status/actions/workflows/uptime.yml/runs?branch=master&status=success&per_page=1");
+            if (!response.ok) return null;
+            const run = (await response.json()).workflow_runs?.[0];
+            if (!run || run.status !== "completed" || run.conclusion !== "success" || !/^[a-f0-9]{40}$/.test(run.head_sha)) return null;
+            const config = await fetch(`https://raw.githubusercontent.com/Kitkitkittt/service-status/${run.head_sha}/.upptimerc.yml`);
+            return config.ok ? { startedAt: run.run_started_at, config: await config.text() } : null;
+          } catch {
+            return null;
+          }
+        })();
         const starts = await Promise.all(
           summaries.map(async ({ slug }) => {
             try {
@@ -379,8 +411,16 @@
           }),
         );
         const metadata = new Map(starts);
+        const run = await monitor;
         return {
-          summaries: new Map(summaries.map((summary) => [summary.slug, { ...summary, lastUpdated: metadata.get(summary.slug)?.lastUpdated || "" }])),
+          summaries: new Map(summaries.map((summary) => {
+            const lastUpdated = metadata.get(summary.slug)?.lastUpdated || "";
+            return [summary.slug, {
+              ...summary,
+              lastUpdated,
+              lastEvidenceAt: monitoringEvidence(lastUpdated, run?.startedAt || "", Boolean(run && runCoversSite(run.config, summary.name, summary.url))),
+            }];
+          })),
           starts: new Map(starts.map(([slug, data]) => [slug, data.startDay])),
         };
       });
