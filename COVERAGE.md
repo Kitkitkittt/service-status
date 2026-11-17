@@ -47,7 +47,7 @@ Do not put loopback URLs, private addresses, tokens or authenticated collectors 
 
 ## Reliability improvements
 
-1. **Check freshness:** the page shows sample age, with a warning after 20 minutes. Intended five-minute GitHub scheduling is not a detection deadline. Unknown timestamps and future clock errors remain unknown.
+1. **Check freshness:** the page combines saved-check timestamps with the latest successful monitor run and its exact endpoint configuration, with a warning after 20 minutes. Healthy probes do not rewrite history on every run. Intended five-minute GitHub scheduling is not a detection deadline. Unknown timestamps and future clock errors remain unknown; reload to refresh loaded evidence.
 2. **Inventory reconciliation:** keep all seven Node Slots visible in the private registry and dashboard, even while admission or measurement is missing. Supersede individual dated facts, not entire host histories.
 3. **Private coverage:** complete resource, dependency and worker evidence through the existing monitoring owners. Keep monitoring failures distinct from service outages and attach actual recovery receipts.
 
