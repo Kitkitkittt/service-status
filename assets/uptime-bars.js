@@ -404,7 +404,6 @@
     if (!needsBars && !needsGrouping && !periodChanged) return;
 
     rendering = true;
-    groupArticles(articles, new Map(), new Map(), period);
     try {
       const { summaries, starts } = await loadData();
       currentSummaries = summaries;
