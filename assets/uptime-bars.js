@@ -5,61 +5,8 @@
   const SVG_HEIGHT = 16;
   const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
   const STALE_AFTER_MS = 20 * 60 * 1000;
-  const DATA_BASE_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/master/";
-  const SERVICE_GROUPS = [
-    {
-      key: "vnibb",
-      title: "VNIBB",
-      slugs: ["vnibb-dashboard"],
-    },
-    {
-      key: "gampo",
-      title: "Gampo",
-      slugs: ["gampo-simulator"],
-    },
-    {
-      key: "research-wiki",
-      title: "Research Wiki",
-      slugs: [
-        "research-wiki-liveness",
-        "research-wiki-readiness",
-        "research-wiki-application-auth-boundary",
-        "research-wiki-mcp-auth-boundary",
-      ],
-    },
-    {
-      key: "9router",
-      title: "9Router",
-      slugs: ["9-router-web-ui", "9-router-api-health", "9-router-api-auth-boundary"],
-    },
-    {
-      key: "tele-proxy",
-      title: "Tele-proxy",
-      slugs: ["tele-proxy-api-health", "tele-proxy-web-ui", "tele-proxy-api-auth-boundary"],
-    },
-    {
-      key: "grafana",
-      title: "Grafana",
-      slugs: ["grafana-api-health", "grafana-api-auth-boundary"],
-    },
-    {
-      key: "langfuse",
-      title: "Langfuse",
-      slugs: ["langfuse-liveness", "langfuse-readiness"],
-    },
-    {
-      key: "other-projects",
-      title: "Other projects",
-      secondary: true,
-      slugs: [
-        "keith-digital-garden",
-        "mechanical-watch-explainer",
-        "auto-scientist-write-up",
-        "f-1-racing-demo",
-        "chords-lab",
-      ],
-    },
-  ];
+  const SNAPSHOT_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/status-data/status.json";
+  const REFRESH_MS = 60000;
 
   function dateKey(date) {
     return date.toISOString().slice(0, 10);
@@ -92,7 +39,7 @@
   function dayState(day, startDay, summary, today) {
     if (!startDay || day < startDay) return "unknown";
     // A stopped monitor cannot establish availability on subsequent days.
-    const sampled = new Date(summary.lastEvidenceAt || summary.lastUpdated);
+    const sampled = new Date(summary.lastEvidenceAt || summary.lastUpdated || NaN);
     if (!Number.isNaN(sampled.getTime()) && day > dateKey(sampled)) return "unknown";
     const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
     if (minutesDown >= 1440) return "full-outage";
@@ -101,10 +48,10 @@
   }
 
   function aggregateState(states) {
-    if (!states.length || states.includes("unknown")) return "unknown";
+    if (!states.length) return "unknown";
     if (states.every((state) => state === "full-outage")) return "full-outage";
     if (states.some((state) => state === "partial-outage" || state === "full-outage")) return "partial-outage";
-    return "operational";
+    return states.includes("unknown") ? "unknown" : "operational";
   }
 
   function incidentFreePercent(states) {
@@ -113,54 +60,25 @@
     return (monitored.filter((state) => state === "operational").length / monitored.length) * 100;
   }
 
-  function startDayFromHistory(history) {
-    const match = history.match(/^startTime:\s*(.+)$/m);
-    if (!match) return "";
-    const start = new Date(match[1].trim());
-    return Number.isNaN(start.getTime()) ? "" : dateKey(start);
-  }
-
-  function lastUpdatedFromHistory(history) {
-    return history.match(/^lastUpdated:\s*(.+)$/m)?.[1].trim() || "";
-  }
-
   function sampleFreshness(timestamp, now = new Date()) {
-    const sampled = new Date(timestamp).getTime();
-    const age = now.getTime() - sampled;
-    if (!Number.isFinite(sampled) || age < -60000) {
-      return { state: "unknown", label: "Check time unavailable" };
-    }
-    const minutes = Math.max(0, Math.floor(age / 60000));
-    return {
-      state: age > STALE_AFTER_MS ? "stale" : "fresh",
-      label: `Monitoring evidence ${minutes} min ago${age > STALE_AFTER_MS ? " · refresh to verify" : ""}`,
-    };
+    const age = now.getTime() - Date.parse(timestamp);
+    if (!Number.isFinite(age) || age < -60000) return "unknown";
+    return age > STALE_AFTER_MS ? "stale" : "fresh";
   }
 
-  function runCoversSite(config, name, url) {
-    // Accept the repository's literal YAML layout; unfamiliar formats fail closed.
-    return config.split(/^  - name: /m).slice(1).some((block) =>
-      block.split("\n")[0].trim() === name &&
-      block.match(/^    url: (.+)$/m)?.[1].trim() === url,
-    );
-  }
+  const HEALTH_LABELS = { down: "Outage", degraded: "Degraded", up: "Operational", unknown: "No status yet" };
 
-  function monitoringEvidence(historyTime, runTime, coveredByRun) {
-    const historyMs = Date.parse(historyTime);
-    const runMs = coveredByRun ? Date.parse(runTime) : NaN;
-    if (Number.isFinite(runMs) && (!Number.isFinite(historyMs) || runMs > historyMs)) {
-      return runTime;
-    }
-    return historyTime;
-  }
-
-  function slugFromArticle(article) {
-    const href = article.querySelector("h4 a")?.getAttribute("href") || "";
-    return href.match(/\/history\/([^/?#]+)/)?.[1] || "";
-  }
-
-  function groupForSlug(slug) {
-    return SERVICE_GROUPS.find((group) => group.slugs.includes(slug)) || SERVICE_GROUPS[SERVICE_GROUPS.length - 1];
+  function groupStatus(checks, now = new Date()) {
+    const freshness = checks.map((check) => sampleFreshness(check.lastEvidenceAt, now));
+    const incomplete = freshness.some((state) => state !== "fresh");
+    const health = ["down", "degraded", "up"].find((state) => checks.some((check) => check.status === state)) || "unknown";
+    if (health === "unknown") return { health, label: HEALTH_LABELS.unknown };
+    if (!incomplete) return { health, label: HEALTH_LABELS[health] };
+    const hasFreshFailure = health !== "up" && checks.some((check, index) =>
+      check.status === health && freshness[index] === "fresh");
+    const suffix = freshness.includes("stale") ? "checks stale" : "checks pending";
+    const prefix = hasFreshFailure ? "" : "Last known: ";
+    return { health, label: `${prefix}${HEALTH_LABELS[health]} · ${suffix}` };
   }
 
   function stateLabel(state) {
@@ -241,266 +159,147 @@
     return createBarFromStates(days, statesForSummary(summary, startDay, days), periodLabel(period, startDay));
   }
 
-  function groupStatus(articles) {
-    if (articles.some((article) => article.dataset.sampleState !== "fresh")) {
-      return { className: "unknown", label: "Awaiting fresh checks" };
-    }
-    if (articles.some((article) => article.classList.contains("down"))) {
-      return { className: "down", label: "Outage" };
-    }
-    if (articles.some((article) => article.classList.contains("degraded"))) {
-      return { className: "degraded", label: "Degraded" };
-    }
-    return { className: "up", label: "Operational" };
+  function createComponent(check, period, now) {
+    const health = Object.hasOwn(HEALTH_LABELS, check.status) ? check.status : "unknown";
+    const article = element("article", health);
+    const heading = element("h4");
+    const link = element("a", "", check.name);
+    link.href = `history/${check.slug}`;
+    heading.append(link);
+    const freshness = sampleFreshness(check.lastEvidenceAt, now);
+    article.dataset.sampleState = freshness;
+    const details = element("div", "check-description", check.description);
+    const evidenceTime = Date.parse(check.lastEvidenceAt);
+    const age = Number.isFinite(evidenceTime) ? Math.max(0, Math.floor((now - evidenceTime) / 60000)) : null;
+    const prefix = freshness === "fresh" ? "" : "Last known · ";
+    const label = freshness === "unknown"
+      ? "Check time unavailable"
+      : `Monitoring evidence ${age} min ago${freshness === "stale" ? " · stale" : ""}`;
+    const evidence = element("p", "sample-freshness", prefix + label);
+    if (check.lastEvidenceAt) evidence.title = check.lastEvidenceAt;
+    const metrics = element("div", "check-metrics", check.uptime
+      ? `Overall uptime ${check.uptime} · Avg response ${check.time} ms`
+      : "Uptime and response time pending");
+    article.append(heading, metrics, details, evidence, createBar(check, check.startDay, period, now));
+    return article;
   }
 
-  function refreshFreshness(articles, summaries, now = new Date()) {
-    let stale = 0;
-    let unknown = 0;
-    articles.forEach((article) => {
-      const summary = summaries.get(slugFromArticle(article));
-      const timestamp = summary?.lastEvidenceAt || "";
-      const freshness = sampleFreshness(timestamp, now);
-      article.dataset.sampleState = freshness.state;
-      if (freshness.state === "stale") stale += 1;
-      if (freshness.state === "unknown") unknown += 1;
-      let label = article.querySelector(".sample-freshness");
-      if (!label) {
-        label = element("p", "sample-freshness");
-        article.appendChild(label);
-      }
-      label.title = timestamp ? `Latest evidence: ${timestamp}; saved history record: ${summary?.lastUpdated || "unavailable"}. Healthy checks do not rewrite history on every run.` : "No verified monitoring timestamp";
-      if (label.textContent !== freshness.label) label.textContent = freshness.label;
-    });
-
-    const section = document.querySelector(".live-status");
-    if (!section) return;
-    let notice = document.querySelector(".monitoring-notice");
-    if (!notice) {
-      notice = element("p", "monitoring-notice");
-      notice.setAttribute("role", "status");
-      section.before(notice);
-    }
-    const delayed = stale + unknown > 0;
-    notice.classList.toggle("monitoring-notice--delayed", delayed);
-    const message = delayed
-      ? `Fresh monitoring evidence needed: ${stale} older than 20 minutes, ${unknown} unavailable. Reload to refresh. Saved history timestamps are not a workflow heartbeat. Private node and worker health are not measured here.`
-      : `All ${articles.length} public checks have monitoring evidence within 20 minutes. Freshness uses saved checks and successful monitor runs covering each endpoint. Private node and worker health are not measured here.`;
-    if (notice.textContent !== message) notice.textContent = message;
-
-    section.querySelectorAll(":scope > .service-group").forEach((details) => {
-      const status = groupStatus([...details.querySelectorAll("article")]);
-      details.classList.remove("up", "down", "degraded", "unknown");
-      details.classList.add(status.className);
-      const label = details.querySelector(".service-group__status");
-      if (label.textContent !== status.label) label.textContent = status.label;
-    });
-  }
-
-  function createGroup(group, articles, summaries, starts, openGroups, period) {
-    const today = new Date();
-    const startDays = articles.map((article) => starts.get(slugFromArticle(article)) || "").filter(Boolean);
-    const earliestStartDay = startDays.sort()[0] || "";
-    const days = buildDays(today, periodDays(period, earliestStartDay, today));
-    const details = element("details", `service-group ${group.secondary ? "service-group--secondary" : "service-group--primary"}`);
+  function createGroup(group, checks, period, now, remembered) {
+    const starts = checks.map((check) => check.startDay).filter(Boolean).sort();
+    const earliest = starts[0] || "";
+    const days = buildDays(now, periodDays(period, earliest, now));
+    const status = groupStatus(checks, now);
+    const secondary = group.id === "other-projects";
+    const details = element("details", `service-group ${secondary ? "service-group--secondary" : "service-group--primary"} ${status.health}`);
+    details.dataset.group = group.id;
+    details.open = remembered ?? (!secondary && ["down", "degraded"].includes(status.health));
     const summary = element("summary", "service-group__summary");
     const identity = element("span", "service-group__identity");
-    const status = groupStatus(articles);
-    const groupSummaries = articles.map((article) => summaries.get(slugFromArticle(article)));
-    const components = element("div", "service-group__components");
-
-    details.dataset.group = group.key;
-    details.classList.add(status.className);
-    details.open = openGroups.has(group.key) || (!group.secondary && status.className !== "up");
     identity.append(
       element("strong", "service-group__title", group.title),
-      element("span", "service-group__count", `${articles.length} component${articles.length === 1 ? "" : "s"}`),
+      element("span", "service-group__count", `${checks.length} check${checks.length === 1 ? "" : "s"}`),
     );
-    summary.append(identity, element("span", "service-group__status", status.label));
-
-    const componentStates = groupSummaries.map((serviceSummary) =>
-      serviceSummary
-        ? statesForSummary(serviceSummary, starts.get(serviceSummary.slug) || "", days)
-        : days.map(() => "unknown"),
-    );
-    const aggregateStates = days.map((_, index) =>
-      aggregateState(componentStates.map((states) => states[index])),
-    );
-    summary.append(createBarFromStates(days, aggregateStates, `Combined ${periodLabel(period, earliestStartDay).toLowerCase()}`));
-
-    articles.forEach((article) => components.appendChild(article));
+    const states = checks.map((check) => statesForSummary(check, check.startDay, days));
+    const combined = days.map((_, index) => aggregateState(states.map((row) => row[index])));
+    summary.append(identity, element("span", "service-group__status", status.label),
+      createBarFromStates(days, combined, `Combined ${periodLabel(period, earliest).toLowerCase()}`));
+    const components = element("div", "service-group__components");
+    components.append(...checks.map((check) => createComponent(check, period, now)));
     details.append(summary, components);
     return details;
   }
 
-  function groupArticles(articles, summaries = new Map(), starts = new Map(), period = "month") {
-    const section = document.querySelector(".live-status");
-    if (!section) return;
-    const openGroups = new Set(
-      [...section.querySelectorAll(":scope > .service-group[open]")].map((group) => group.dataset.group),
-    );
-    const articlesByGroup = new Map(SERVICE_GROUPS.map((group) => [group.key, []]));
-
-    articles.forEach((article) => {
-      articlesByGroup.get(groupForSlug(slugFromArticle(article)).key).push(article);
-    });
-
-    const fragment = document.createDocumentFragment();
-    SERVICE_GROUPS.forEach((group) => {
-      const groupedArticles = articlesByGroup.get(group.key);
-      if (groupedArticles.length) {
-        fragment.appendChild(createGroup(group, groupedArticles, summaries, starts, openGroups, period));
-      }
-    });
-    section.replaceChildren(fragment);
-    section.classList.add("live-status--grouped");
-  }
-
-  const exported = {
-    aggregateState,
-    buildDays,
-    dayState,
-    groupForSlug,
-    incidentFreePercent,
-    lastUpdatedFromHistory,
-    periodDays,
-    periodLabel,
-    startDayFromHistory,
-    sampleFreshness,
-    groupStatus,
-    runCoversSite,
-    monitoringEvidence,
-  };
+  const exported = { aggregateState, buildDays, dayState, groupStatus, incidentFreePercent,
+    periodDays, periodLabel, sampleFreshness };
   if (typeof module !== "undefined" && module.exports) module.exports = exported;
   if (typeof document === "undefined") return;
 
-  let dataPromise;
-  let rendering = false;
-  let rerenderRequested = false;
-  let currentSummaries = new Map();
+  let snapshot;
+  let unavailable = false;
+  let renderedSection;
+  let renderedPeriod;
+  let renderedSnapshot;
+  let renderedMinute;
+  let pending = false;
 
-  function loadData() {
-    if (dataPromise) return dataPromise;
-    dataPromise = fetch(`${DATA_BASE_URL}history/summary.json`)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Summary request failed: ${response.status}`);
-        return response.json();
-      })
-      .then(async (summaries) => {
-        const monitor = (async () => {
-          try {
-            const response = await fetch("https://api.github.com/repos/Kitkitkittt/service-status/actions/workflows/uptime.yml/runs?branch=master&status=success&per_page=1");
-            if (!response.ok) return null;
-            const run = (await response.json()).workflow_runs?.[0];
-            if (!run || run.status !== "completed" || run.conclusion !== "success" || !/^[a-f0-9]{40}$/.test(run.head_sha)) return null;
-            const config = await fetch(`https://raw.githubusercontent.com/Kitkitkittt/service-status/${run.head_sha}/.upptimerc.yml`);
-            return config.ok ? { startedAt: run.run_started_at, config: await config.text() } : null;
-          } catch {
-            return null;
-          }
-        })();
-        const starts = await Promise.all(
-          summaries.map(async ({ slug }) => {
-            try {
-              const response = await fetch(`${DATA_BASE_URL}history/${slug}.yml`);
-              const history = response.ok ? await response.text() : "";
-              return [slug, { startDay: startDayFromHistory(history), lastUpdated: lastUpdatedFromHistory(history) }];
-            } catch {
-              return [slug, { startDay: "", lastUpdated: "" }];
-            }
-          }),
-        );
-        const metadata = new Map(starts);
-        const run = await monitor;
-        return {
-          summaries: new Map(summaries.map((summary) => {
-            const lastUpdated = metadata.get(summary.slug)?.lastUpdated || "";
-            return [summary.slug, {
-              ...summary,
-              lastUpdated,
-              lastEvidenceAt: monitoringEvidence(lastUpdated, run?.startedAt || "", Boolean(run && runCoversSite(run.config, summary.name, summary.url))),
-            }];
-          })),
-          starts: new Map(starts.map(([slug, data]) => [slug, data.startDay])),
-        };
-      });
-    return dataPromise;
+  function render() {
+    const section = document.querySelector(".live-status");
+    const selected = document.querySelector('input[name="d"]:checked')?.value;
+    const period = selected === "year" || selected === "all" ? selected : "month";
+    const now = new Date();
+    if (!section) return;
+
+    let notice = section.previousElementSibling;
+    if (!notice?.classList.contains("monitoring-notice")) {
+      notice = element("p", "monitoring-notice");
+      notice.setAttribute("role", "status");
+      section.before(notice);
+    }
+    const incomplete = snapshot?.checks.filter((check) => sampleFreshness(check.lastEvidenceAt, now) !== "fresh").length;
+    const message = unavailable
+      ? snapshot ? "Snapshot refresh failed. Showing the last available snapshot." : "Current monitoring snapshot is unavailable. The status below is from the last page build."
+      : !snapshot ? "Loading monitoring snapshot…"
+      : incomplete ? `${incomplete} of ${snapshot.checks.length} checks have stale or missing evidence. Showing last-known status.`
+      : `All ${snapshot.checks.length} checks have monitoring evidence within 20 minutes.`;
+    notice.classList.toggle("monitoring-notice--delayed", Boolean(unavailable || incomplete));
+    if (notice.textContent !== message) notice.textContent = message;
+    if (!snapshot) return;
+
+    const minute = Math.floor(now.getTime() / REFRESH_MS);
+    if (renderedSection === section && renderedPeriod === period && renderedSnapshot === snapshot &&
+        renderedMinute === minute && section.firstElementChild?.classList.contains("service-group")) return;
+    renderedSection = section;
+    renderedPeriod = period;
+    renderedSnapshot = snapshot;
+    renderedMinute = minute;
+    const open = new Map([...section.querySelectorAll(":scope > .service-group")].map((group) => [group.dataset.group, group.open]));
+    const focused = document.activeElement;
+    const focusedGroup = focused?.closest(".service-group")?.dataset.group;
+    const focusedHref = focused?.getAttribute("href");
+    section.replaceChildren(...snapshot.groups.map((group) => createGroup(
+      group, snapshot.checks.filter((check) => check.group === group.id), period, now, open.get(group.id),
+    )));
+    if (focusedGroup) {
+      const group = [...section.children].find((child) => child.dataset.group === focusedGroup);
+      const target = focusedHref
+        ? [...(group?.querySelectorAll("a") || [])].find((link) => link.getAttribute("href") === focusedHref)
+        : group?.querySelector("summary");
+      target?.focus({ preventScroll: true });
+    }
+    section.classList.add("live-status--grouped");
+    section.dataset.period = period;
   }
 
-  async function render() {
-    if (rendering) {
-      rerenderRequested = true;
-      return;
-    }
-    const section = document.querySelector(".live-status");
-    const articles = [...document.querySelectorAll(".live-status article")];
-    if (!section || !articles.length) return;
-    const selectedPeriod = document.querySelector('input[name="d"]:checked')?.value;
-    const period = selectedPeriod === "year" || selectedPeriod === "all" ? selectedPeriod : "month";
-    const periodChanged = section.dataset.period !== period;
-    if (periodChanged) articles.forEach((article) => article.querySelector(".uptime-strip")?.remove());
-    const needsBars = articles.some((article) => !article.querySelector(".uptime-strip"));
-    const needsGrouping = articles.some((article) => !article.closest(".service-group"));
-    if (!needsBars && !needsGrouping && !periodChanged) return;
-
-    rendering = true;
+  async function refresh() {
+    if (pending) return;
+    pending = true;
     try {
-      const { summaries, starts } = await loadData();
-      currentSummaries = summaries;
-      refreshFreshness(articles, summaries);
-      articles.forEach((article) => {
-        const slug = slugFromArticle(article);
-        const serviceSummary = summaries.get(slug);
-        if (!article.querySelector(".uptime-strip")) {
-          const startDay = starts.get(slug) || "";
-          const days = buildDays(new Date(), periodDays(period, startDay));
-          article.appendChild(
-            serviceSummary
-              ? createBar(serviceSummary, startDay, period)
-              : createBarFromStates(days, days.map(() => "unknown"), periodLabel(period, startDay)),
-          );
-        }
-      });
-      groupArticles(articles, summaries, starts, period);
-    } catch (error) {
-      refreshFreshness(articles, new Map());
-      articles.forEach((article) => {
-        if (!article.querySelector(".uptime-strip")) {
-          const days = buildDays(new Date(), periodDays(period));
-          article.appendChild(createBarFromStates(days, days.map(() => "unknown"), periodLabel(period)));
-        }
-      });
-      groupArticles(articles, new Map(), new Map(), period);
-      console.error("Unable to render uptime history", error);
-    } finally {
-      section.dataset.period = period;
-      rendering = false;
-      if (rerenderRequested) {
-        rerenderRequested = false;
-        render();
+      const response = await fetch(SNAPSHOT_URL, { cache: "no-cache", signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error(`Snapshot HTTP ${response.status}`);
+      const next = await response.json();
+      if (next.schemaVersion !== 1 || !Array.isArray(next.groups) || !Array.isArray(next.checks)) {
+        throw new Error("Unsupported status snapshot");
       }
+      if (snapshot?.sourceSha !== next.sourceSha || snapshot?.monitor?.runId !== next.monitor?.runId) {
+        snapshot = next;
+      }
+      unavailable = false;
+    } catch {
+      unavailable = true;
+    } finally {
+      pending = false;
+      render();
     }
   }
 
   function start() {
-    const observer = new MutationObserver(render);
-    observer.observe(document.body, { childList: true, subtree: true });
+    new MutationObserver(render).observe(document.body, { childList: true, subtree: true });
     document.addEventListener("change", (event) => {
       if (event.target.matches('input[name="d"]')) render();
     });
-    function selectDefaultPeriod() {
-      const month = document.querySelector("#data_month");
-      if (month && !document.querySelector('#data_year:checked, #data_all:checked')) {
-        month.click();
-      } else {
-        render();
-      }
-    }
-    selectDefaultPeriod();
-    window.setTimeout(selectDefaultPeriod, 0);
-    window.setInterval(() => {
-      refreshFreshness([...document.querySelectorAll(".live-status article")], currentSummaries);
-    }, 60000);
+    document.querySelector("#data_month")?.click();
+    refresh();
+    window.setInterval(refresh, REFRESH_MS);
   }
 
   if (document.readyState === "loading") {

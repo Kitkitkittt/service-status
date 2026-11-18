@@ -718,3 +718,44 @@ footer a {
   }
 
 }
+
+/* Snapshot rows retain the last observed state alongside evidence age. */
+.live-status article.unknown h4::before {
+  background: #92752f;
+  box-shadow: 0 0 0 3px #f8edd5;
+}
+
+.live-status article.unknown h4::after {
+  color: #695727;
+  content: "Pending";
+}
+
+.live-status article > .check-description,
+.live-status article > .sample-freshness {
+  grid-column: 1 / -1;
+  grid-row: auto;
+  text-align: left;
+}
+
+.live-status article > .check-description {
+  margin-top: 7px;
+  color: #555;
+  font-size: 13px;
+}
+
+.live-status article > .check-metrics {
+  color: #555;
+  font-size: 12px;
+  text-align: right;
+}
+
+.service-group__status {
+  text-align: right;
+}
+
+@media (max-width: 520px) {
+  .live-status article > .check-metrics {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+}

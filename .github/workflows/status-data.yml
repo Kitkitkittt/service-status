@@ -1,0 +1,95 @@
+name: Status data
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+    paths:
+      - ".upptimerc.yml"
+      - "catalog.yml"
+      - "contracts/**"
+      - "COVERAGE.md"
+      - "scripts/status_data.py"
+      - ".github/workflows/status-data.yml"
+  workflow_run:
+    workflows: [Uptime CI, Response Time CI, Summary CI]
+    branches: [master]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install PyYAML==6.0.3
+      - run: python3 scripts/status_data.py check
+      - run: python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json"
+      - run: node --test tests/uptime-bars.test.js
+      - run: python3 tests/status_data_test.py
+
+  publish:
+    if: >-
+      github.ref == 'refs/heads/master' && github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    concurrency:
+      group: status-data-master
+      cancel-in-progress: false
+    permissions:
+      actions: read
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          fetch-depth: 1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install PyYAML==6.0.3
+      - name: Build snapshot from repository history and a completed monitor run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/uptime-run.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/uptime.yml/runs?branch=master&status=success&per_page=1" \
+            --jq '.workflow_runs[0] | if . == null then empty else {head_sha, id, run_started_at} end' > "$receipt"
+          args=()
+          if [[ -s "$receipt" ]]; then
+            sha="$(jq -er .head_sha "$receipt")"
+            [[ "$sha" =~ ^[a-f0-9]{40}$ ]]
+            git fetch --no-tags --depth=1 origin "$sha"
+            args=(--run "$receipt")
+          fi
+          python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json" "${args[@]}"
+      - name: Publish snapshot without rebuilding Pages
+        run: |
+          set -euo pipefail
+          data="$RUNNER_TEMP/status-data"
+          if git ls-remote --exit-code --heads origin refs/heads/status-data; then
+            git fetch --no-tags --depth=1 origin refs/heads/status-data
+            git worktree add --detach "$data" FETCH_HEAD
+          else
+            result=$?
+            if [[ "$result" != 2 ]]; then exit "$result"; fi
+            git worktree add --detach "$data" HEAD
+            git -C "$data" switch --orphan snapshot-output
+          fi
+          cp "$RUNNER_TEMP/status.json" "$data/status.json"
+          git -C "$data" add status.json
+          if git -C "$data" diff --cached --quiet; then exit 0; fi
+          git -C "$data" -c user.name=github-actions[bot] \
+            -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
+            commit -m "Publish public monitoring snapshot"
+          git -C "$data" push origin HEAD:refs/heads/status-data

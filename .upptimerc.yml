@@ -2,114 +2,133 @@ owner: Kitkitkittt
 repo: service-status
 
 workflowSchedule:
-  updateTemplate: "0 0 * * 1"
-  updates: "0 3 * * 1"
   uptime: "2-59/5 * * * *"
 
 sites:
   - name: VNIBB Dashboard
+    slug: vnibb-dashboard
     url: https://vnibb-web.vercel.app/dashboard
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Gampo Simulator
+    slug: gampo-simulator
     url: https://gampo-educational-simulator.netlify.app
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Research Wiki Liveness
+    slug: research-wiki-liveness
     url: https://research.vnibb.xyz/health/live
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Research Wiki Readiness
+    slug: research-wiki-readiness
     url: https://research.vnibb.xyz/health/ready
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Research Wiki Application Auth Boundary
+    slug: research-wiki-application-auth-boundary
     url: https://research.vnibb.xyz/
     expectedStatusCodes:
       - 401
     timeout: 15000
   - name: Research Wiki MCP Auth Boundary
+    slug: research-wiki-mcp-auth-boundary
     url: https://research.vnibb.xyz/mcp/research-brain/
     expectedStatusCodes:
       - 401
     timeout: 15000
   - name: 9Router Web UI
+    slug: 9-router-web-ui
     url: https://9router.vnibb.xyz/
     expectedStatusCodes:
       - 200
       - 307
     timeout: 15000
   - name: 9Router API Health
+    slug: 9-router-api-health
     url: https://9router.vnibb.xyz/api/health
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: 9Router API Auth Boundary
+    slug: 9-router-api-auth-boundary
     url: https://9router.vnibb.xyz/v1/models
     expectedStatusCodes:
       - 401
     timeout: 15000
   - name: Tele-proxy API Health
+    slug: tele-proxy-api-health
     url: https://tele-proxy.vnibb.xyz/api/health
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Tele-proxy Web UI
+    slug: tele-proxy-web-ui
     url: https://tele-proxy.vnibb.xyz/
     expectedStatusCodes:
       - 200
       - 307
     timeout: 15000
   - name: Tele-proxy API Auth Boundary
+    slug: tele-proxy-api-auth-boundary
     url: https://tele-proxy.vnibb.xyz/v1/models
     expectedStatusCodes:
       - 401
     timeout: 15000
   - name: Grafana API Health
+    slug: grafana-api-health
     url: https://grafana.vnibb.xyz/api/health
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Grafana API Auth Boundary
+    slug: grafana-api-auth-boundary
     url: https://grafana.vnibb.xyz/api/datasources
     expectedStatusCodes:
       - 401
     timeout: 15000
   - name: Langfuse Liveness
+    slug: langfuse-liveness
     url: https://langfuse.vnibb.xyz/api/public/health
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Langfuse Readiness
+    slug: langfuse-readiness
     url: https://langfuse.vnibb.xyz/api/public/ready
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Keith Digital Garden
+    slug: keith-digital-garden
     url: https://kohnnn.github.io/keith-digital-garden/
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Mechanical Watch Explainer
+    slug: mechanical-watch-explainer
     url: https://kohnnn.github.io/interactive-explanation/mechanical-watch/
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: AutoScientist Write-up
+    slug: auto-scientist-write-up
     url: https://adaptions-writeup.vercel.app/
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: F1 Racing Demo
+    slug: f1-racing-demo
     url: https://f1-demo.netlify.app/
     expectedStatusCodes:
       - 200
     timeout: 15000
   - name: Chords Lab
+    slug: chords-lab
     url: https://chords-lab-app.netlify.app/
     expectedStatusCodes:
       - 200
@@ -118,9 +137,9 @@ sites:
 status-website:
   baseUrl: /service-status
   name: VNI Services Status
-  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=fabric-coverage-1
+  themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=status-snapshot-1
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=fabric-coverage-2
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=status-snapshot-1
       async: true
   introTitle: "System status"
   introMessage: Public availability across applications, AI gateways, Grafana and Langfuse. Expected HTTP 401 means an authentication boundary passed. Checks target five-minute intervals; monitoring-evidence age is shown below. Private node, worker and telemetry health require separate authenticated monitoring.
