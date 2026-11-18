@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceSha": "9412e2747ff3190c8750c66bdcba55c6c8667a49",
+  "sourceSha": "651d84e91a8e683fa237c9472984c0975983b627",
   "monitor": {
-    "runId": 44219678087,
-    "sourceSha": "e7dba5c0e5def842897b6310960ff762626119f0",
-    "startedAt": "2026-11-18T01:57:25Z"
+    "runId": 44261726165,
+    "sourceSha": "4ddb3a87130d4e498bac0d9f02f2be3091051cdc",
+    "startedAt": "2026-11-18T07:48:13Z"
   },
   "groups": [
     {
@@ -48,7 +48,7 @@
       "description": "The public analytics dashboard responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:00:18.719000Z",
-      "lastEvidenceAt": "2026-11-18T04:00:18.719000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -497,7 +497,7 @@
       "description": "The public education simulator responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:00:19.147000Z",
-      "lastEvidenceAt": "2026-11-18T04:00:19.147000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -946,7 +946,7 @@
       "description": "The Wiki listener answers.",
       "status": "down",
       "lastUpdated": "2026-11-18T04:00:31.397000Z",
-      "lastEvidenceAt": "2026-11-18T04:00:31.397000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -990,7 +990,7 @@
         "2026-11-02": 1440,
         "2026-11-01": 1440,
         "2026-10-31": 1320,
-        "2026-11-18": 302,
+        "2026-11-18": 470,
         "2026-11-17": 1440,
         "2026-11-16": 1440,
         "2026-11-15": 1440,
@@ -1006,7 +1006,7 @@
         "2026-11-05": 1440,
         "2026-11-04": 487
       },
-      "uptime": "47.26%",
+      "uptime": "47.20%",
       "time": 667,
       "performance": {
         "days": [
@@ -1272,7 +1272,7 @@
       "description": "The Wiki reports its dependencies ready.",
       "status": "down",
       "lastUpdated": "2026-11-18T04:00:43.626000Z",
-      "lastEvidenceAt": "2026-11-18T04:00:43.626000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -1321,7 +1321,7 @@
         "2026-11-02": 1440,
         "2026-11-01": 1440,
         "2026-10-31": 1320,
-        "2026-11-18": 302,
+        "2026-11-18": 470,
         "2026-11-17": 1440,
         "2026-11-16": 1440,
         "2026-11-15": 1440,
@@ -1337,7 +1337,7 @@
         "2026-11-05": 1440,
         "2026-11-04": 486
       },
-      "uptime": "39.51%",
+      "uptime": "39.46%",
       "time": 961,
       "performance": {
         "days": [
@@ -1568,7 +1568,7 @@
       "description": "The Wiki rejects anonymous application access.",
       "status": "down",
       "lastUpdated": "2026-11-18T04:00:55.956000Z",
-      "lastEvidenceAt": "2026-11-18T04:00:55.956000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 507,
@@ -1612,7 +1612,7 @@
         "2026-11-02": 1440,
         "2026-11-01": 1440,
         "2026-10-31": 1320,
-        "2026-11-18": 302,
+        "2026-11-18": 470,
         "2026-11-17": 1440,
         "2026-11-16": 1440,
         "2026-11-15": 1440,
@@ -1628,7 +1628,7 @@
         "2026-11-05": 1440,
         "2026-11-04": 486
       },
-      "uptime": "47.77%",
+      "uptime": "47.71%",
       "time": 488,
       "performance": {
         "days": [
@@ -1894,7 +1894,7 @@
       "description": "The Wiki rejects anonymous MCP access.",
       "status": "down",
       "lastUpdated": "2026-11-18T04:01:08.180000Z",
-      "lastEvidenceAt": "2026-11-18T04:01:08.180000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 935,
@@ -1938,7 +1938,7 @@
         "2026-11-02": 1440,
         "2026-11-01": 1440,
         "2026-10-31": 1319,
-        "2026-11-18": 302,
+        "2026-11-18": 470,
         "2026-11-17": 1440,
         "2026-11-16": 1440,
         "2026-11-15": 1440,
@@ -1954,7 +1954,7 @@
         "2026-11-05": 1440,
         "2026-11-04": 486
       },
-      "uptime": "47.43%",
+      "uptime": "47.37%",
       "time": 475,
       "performance": {
         "days": [
@@ -2218,19 +2218,19 @@
       "name": "9Router Web UI",
       "group": "9router",
       "description": "The router web entry point or its redirect answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:01:20.508000Z",
-      "lastEvidenceAt": "2026-11-18T04:01:20.508000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:20.050000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:20.050000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
         "2026-10-28": 375,
         "2026-11-08": 658,
         "2026-11-07": 1201,
-        "2026-11-18": 184
+        "2026-11-18": 351
       },
-      "uptime": "97.96%",
-      "time": 2153,
+      "uptime": "97.83%",
+      "time": 2158,
       "performance": {
         "days": [
           [
@@ -2662,10 +2662,15 @@
             "2026-11-17",
             3,
             7601
+          ],
+          [
+            "2026-11-18",
+            1,
+            2671
           ]
         ],
-        "latestAt": "2026-11-17T11:28:31Z",
-        "latestMs": 2339
+        "latestAt": "2026-11-18T07:49:20Z",
+        "latestMs": 2671
       }
     },
     {
@@ -2673,19 +2678,19 @@
       "name": "9Router API Health",
       "group": "9router",
       "description": "The router API listener answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:01:32.772000Z",
-      "lastEvidenceAt": "2026-11-18T04:01:32.772000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:23.150000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:23.150000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
         "2026-10-28": 375,
         "2026-11-08": 658,
         "2026-11-07": 1201,
-        "2026-11-18": 183
+        "2026-11-18": 351
       },
-      "uptime": "97.96%",
-      "time": 612,
+      "uptime": "97.83%",
+      "time": 613,
       "performance": {
         "days": [
           [
@@ -3117,10 +3122,15 @@
             "2026-11-17",
             3,
             2376
+          ],
+          [
+            "2026-11-18",
+            1,
+            632
           ]
         ],
-        "latestAt": "2026-11-17T11:28:32Z",
-        "latestMs": 682
+        "latestAt": "2026-11-18T07:49:23Z",
+        "latestMs": 632
       }
     },
     {
@@ -3128,19 +3138,19 @@
       "name": "9Router API Auth Boundary",
       "group": "9router",
       "description": "The router rejects anonymous access to models.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:01:45.015000Z",
-      "lastEvidenceAt": "2026-11-18T04:01:45.015000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:26.029000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:26.029000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
         "2026-10-28": 375,
         "2026-11-08": 658,
         "2026-11-07": 1200,
-        "2026-11-18": 183
+        "2026-11-18": 350
       },
-      "uptime": "97.96%",
-      "time": 579,
+      "uptime": "97.83%",
+      "time": 576,
       "performance": {
         "days": [
           [
@@ -3572,10 +3582,15 @@
             "2026-11-17",
             3,
             2742
+          ],
+          [
+            "2026-11-18",
+            1,
+            313
           ]
         ],
-        "latestAt": "2026-11-17T11:28:32Z",
-        "latestMs": 589
+        "latestAt": "2026-11-18T07:49:26Z",
+        "latestMs": 313
       }
     },
     {
@@ -3583,15 +3598,15 @@
       "name": "Tele-proxy API Health",
       "group": "tele-proxy",
       "description": "The public gateway listener answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:01:57.368000Z",
-      "lastEvidenceAt": "2026-11-18T04:01:57.368000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:29.680000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:29.680000Z",
       "startDay": "2026-11-10",
       "dailyMinutesDown": {
-        "2026-11-18": 183
+        "2026-11-18": 350
       },
-      "uptime": "98.37%",
-      "time": 778,
+      "uptime": "96.93%",
+      "time": 803,
       "performance": {
         "days": [
           [
@@ -3633,10 +3648,15 @@
             "2026-11-17",
             3,
             2686
+          ],
+          [
+            "2026-11-18",
+            1,
+            1096
           ]
         ],
-        "latestAt": "2026-11-17T11:28:33Z",
-        "latestMs": 1019
+        "latestAt": "2026-11-18T07:49:29Z",
+        "latestMs": 1096
       }
     },
     {
@@ -3644,25 +3664,30 @@
       "name": "Tele-proxy Web UI",
       "group": "tele-proxy",
       "description": "The web entry point or its redirect answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:02:09.719000Z",
-      "lastEvidenceAt": "2026-11-18T04:02:09.719000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:34.709000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:34.709000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 183
+        "2026-11-18": 350
       },
-      "uptime": "82.80%",
-      "time": 1300,
+      "uptime": "71.54%",
+      "time": 1541,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             5021
+          ],
+          [
+            "2026-11-18",
+            1,
+            2507
           ]
         ],
-        "latestAt": "2026-11-17T11:28:36Z",
-        "latestMs": 2300
+        "latestAt": "2026-11-18T07:49:34Z",
+        "latestMs": 2507
       }
     },
     {
@@ -3670,25 +3695,30 @@
       "name": "Tele-proxy API Auth Boundary",
       "group": "tele-proxy",
       "description": "The models API rejects requests without credentials.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:02:22.039000Z",
-      "lastEvidenceAt": "2026-11-18T04:02:22.039000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:38.006000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:38.006000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 182
+        "2026-11-18": 350
       },
-      "uptime": "82.82%",
-      "time": 179,
+      "uptime": "71.55%",
+      "time": 290,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             607
+          ],
+          [
+            "2026-11-18",
+            1,
+            737
           ]
         ],
-        "latestAt": "2026-11-17T11:28:36Z",
-        "latestMs": 268
+        "latestAt": "2026-11-18T07:49:38Z",
+        "latestMs": 737
       }
     },
     {
@@ -3696,25 +3726,30 @@
       "name": "Grafana API Health",
       "group": "grafana",
       "description": "The Grafana health handler answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:02:34.297000Z",
-      "lastEvidenceAt": "2026-11-18T04:02:34.297000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:41.151000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:41.151000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 182
+        "2026-11-18": 350
       },
-      "uptime": "82.84%",
-      "time": 444,
+      "uptime": "71.57%",
+      "time": 513,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             1606
+          ],
+          [
+            "2026-11-18",
+            1,
+            791
           ]
         ],
-        "latestAt": "2026-11-17T11:28:37Z",
-        "latestMs": 656
+        "latestAt": "2026-11-18T07:49:41Z",
+        "latestMs": 791
       }
     },
     {
@@ -3722,25 +3757,30 @@
       "name": "Grafana API Auth Boundary",
       "group": "grafana",
       "description": "Grafana rejects anonymous access to datasource configuration.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:02:46.540000Z",
-      "lastEvidenceAt": "2026-11-18T04:02:46.540000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:43.933000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:43.933000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 182
+        "2026-11-18": 350
       },
-      "uptime": "82.86%",
-      "time": 385,
+      "uptime": "71.58%",
+      "time": 365,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             1390
+          ],
+          [
+            "2026-11-18",
+            1,
+            289
           ]
         ],
-        "latestAt": "2026-11-17T11:28:37Z",
-        "latestMs": 571
+        "latestAt": "2026-11-18T07:49:43Z",
+        "latestMs": 289
       }
     },
     {
@@ -3748,25 +3788,30 @@
       "name": "Langfuse Liveness",
       "group": "langfuse",
       "description": "The Langfuse listener answers.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:02:58.890000Z",
-      "lastEvidenceAt": "2026-11-18T04:02:58.890000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:46.957000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:46.957000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 182
+        "2026-11-18": 349
       },
-      "uptime": "82.88%",
-      "time": 444,
+      "uptime": "71.60%",
+      "time": 504,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             1529
+          ],
+          [
+            "2026-11-18",
+            1,
+            745
           ]
         ],
-        "latestAt": "2026-11-17T11:28:38Z",
-        "latestMs": 632
+        "latestAt": "2026-11-18T07:49:46Z",
+        "latestMs": 745
       }
     },
     {
@@ -3774,25 +3819,30 @@
       "name": "Langfuse Readiness",
       "group": "langfuse",
       "description": "Langfuse reports its dependencies ready.",
-      "status": "down",
-      "lastUpdated": "2026-11-18T04:03:11.204000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:11.204000Z",
+      "status": "up",
+      "lastUpdated": "2026-11-18T07:49:50.144000Z",
+      "lastEvidenceAt": "2026-11-18T07:49:50.144000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
-        "2026-11-18": 182
+        "2026-11-18": 349
       },
-      "uptime": "82.91%",
-      "time": 424,
+      "uptime": "71.61%",
+      "time": 491,
       "performance": {
         "days": [
           [
             "2026-11-17",
             2,
             1465
+          ],
+          [
+            "2026-11-18",
+            1,
+            756
           ]
         ],
-        "latestAt": "2026-11-17T11:28:39Z",
-        "latestMs": 649
+        "latestAt": "2026-11-18T07:49:50Z",
+        "latestMs": 756
       }
     },
     {
@@ -3802,7 +3852,7 @@
       "description": "The public knowledge garden responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:03:11.290000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:11.290000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -4251,7 +4301,7 @@
       "description": "The interactive watch explainer responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:03:11.353000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:11.353000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -4700,7 +4750,7 @@
       "description": "The public project write-up responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:03:11.413000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:11.413000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5149,7 +5199,7 @@
       "description": "The public telemetry demo responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:03:11.789000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:11.789000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5598,7 +5648,7 @@
       "description": "The public music theory app responds.",
       "status": "up",
       "lastUpdated": "2026-11-18T04:03:12.092000Z",
-      "lastEvidenceAt": "2026-11-18T04:03:12.092000Z",
+      "lastEvidenceAt": "2026-11-18T07:48:13Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
