@@ -2,20 +2,35 @@
 
 Reconciled 17 November 2026. This is a coverage inventory, not a live node-health report.
 
-The public status page monitors **21 HTTPS surfaces across eight display groups**. Existing component names are retained so their histories continue. Newly added checks start collecting history when Upptime first runs them; earlier days remain unknown.
+<!-- generated public checks -->
 
-| Group | Checks | What passing establishes |
-| --- | ---: | --- |
-| VNIBB | 1 | Public dashboard responds |
-| Gampo | 1 | Public simulator responds |
-| Research Wiki | 4 | Liveness, readiness and two anonymous authentication boundaries |
-| 9Router | 3 | UI/redirect, API liveness and anonymous authentication boundary |
-| Tele-proxy | 3 | UI/redirect, API liveness and anonymous authentication boundary |
-| Grafana | 2 | Health handler and protected datasource-list boundary |
-| Langfuse | 2 | Application liveness and declared readiness |
-| Other public projects | 5 | Five separately monitored project pages respond |
+The public status page tracks **21 HTTPS checks across 8 groups**.
 
-The table contains eight display groups; “Other public projects” contains five independent products. A passed HTTP check does not establish successful inference, complete traces, a working datasource query, backup recoverability or accepted agent work.
+| Group | Check | Expected HTTP | What it checks |
+| --- | --- | --- | --- |
+| VNIBB | VNIBB Dashboard | 200 | The public analytics dashboard responds. |
+| Gampo | Gampo Simulator | 200 | The public education simulator responds. |
+| Research Wiki | Research Wiki Liveness | 200 | The Wiki listener answers. |
+| Research Wiki | Research Wiki Readiness | 200 | The Wiki reports its dependencies ready. |
+| Research Wiki | Research Wiki Application Auth Boundary | 401 | The Wiki rejects anonymous application access. |
+| Research Wiki | Research Wiki MCP Auth Boundary | 401 | The Wiki rejects anonymous MCP access. |
+| 9Router | 9Router Web UI | 200, 307 | The router web entry point or its redirect answers. |
+| 9Router | 9Router API Health | 200 | The router API listener answers. |
+| 9Router | 9Router API Auth Boundary | 401 | The router rejects anonymous access to models. |
+| Tele-proxy | Tele-proxy API Health | 200 | The public gateway listener answers. |
+| Tele-proxy | Tele-proxy Web UI | 200, 307 | The web entry point or its redirect answers. |
+| Tele-proxy | Tele-proxy API Auth Boundary | 401 | The models API rejects requests without credentials. |
+| Grafana | Grafana API Health | 200 | The Grafana health handler answers. |
+| Grafana | Grafana API Auth Boundary | 401 | Grafana rejects anonymous access to datasource configuration. |
+| Langfuse | Langfuse Liveness | 200 | The Langfuse listener answers. |
+| Langfuse | Langfuse Readiness | 200 | Langfuse reports its dependencies ready. |
+| Other projects | Keith Digital Garden | 200 | The public knowledge garden responds. |
+| Other projects | Mechanical Watch Explainer | 200 | The interactive watch explainer responds. |
+| Other projects | AutoScientist Write-up | 200 | The public project write-up responds. |
+| Other projects | F1 Racing Demo | 200 | The public telemetry demo responds. |
+| Other projects | Chords Lab | 200 | The public music theory app responds. |
+
+<!-- generated public checks -->
 
 ## Node coverage
 
@@ -47,7 +62,7 @@ Do not put loopback URLs, private addresses, tokens or authenticated collectors 
 
 ## Reliability improvements
 
-1. **Check freshness:** the page combines saved-check timestamps with the latest successful monitor run and its exact endpoint configuration, with a warning after 20 minutes. Healthy probes do not rewrite history on every run. Intended five-minute GitHub scheduling is not a detection deadline. Unknown timestamps and future clock errors remain unknown; reload to refresh loaded evidence.
+1. **Check freshness:** the page combines saved-check timestamps with the latest successful monitor run and its exact endpoint configuration, with a warning after 20 minutes. Healthy probes do not rewrite history on every run. Intended five-minute GitHub scheduling is not a detection deadline. Unknown timestamps and future clock errors remain unknown. The page refreshes its snapshot every minute.
 2. **Inventory reconciliation:** keep all seven Node Slots visible in the private registry and dashboard, even while admission or measurement is missing. Supersede individual dated facts, not entire host histories.
 3. **Private coverage:** complete resource, dependency and worker evidence through the existing monitoring owners. Keep monitoring failures distinct from service outages and attach actual recovery receipts.
 

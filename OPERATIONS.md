@@ -6,35 +6,11 @@ This public Upptime repository monitors externally observable service surfaces a
 
 That interval is intended, not guaranteed: GitHub Actions can delay or drop scheduled runs, and [public schedules are disabled after 60 days of repository inactivity](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule), so a passing check is not a detection deadline.
 
-`.upptimerc.yml` is the configuration source of truth. Files under `.github/workflows/`, `api/`, `graphs/`, and `history/`, plus the generated status table in `README.md`, are Upptime outputs.
+`.upptimerc.yml` is the configuration source of truth. Upptime owns the generated data under `api/`, `graphs/`, and `history/`, plus its README status table. This repository owns the Pages and snapshot workflows. Upptime template regeneration happens through reviewed changes so it cannot replace those workflows.
 
 ## Service inventory
 
-| Site | Check | Healthy response | Meaning |
-| --- | --- | --- | --- |
-| VNIBB | `https://vnibb-web.vercel.app/dashboard` | 200 | Public analytics dashboard is available. |
-| Gampo | `https://gampo-educational-simulator.netlify.app` | 200 | Public educational simulator is available. |
-| Research Wiki | `/health/live` | 200 | Application process is live through the public tunnel. |
-| Research Wiki | `/health/ready` | 200 | Application dependencies pass readiness checks. |
-| Research Wiki | `/` | 401 | Protected application rejects anonymous access. |
-| Research Wiki | `/mcp/research-brain/` | 401 | MCP route exists and rejects anonymous access. Keep the trailing slash. |
-| 9Router | `/` | 200 or 307 | Public tunnel reaches the UI or its redirect. |
-| 9Router | `/api/health` | 200 | Router API health surface is live. |
-| 9Router | `/v1/models` | 401 | Protected OpenAI-compatible API rejects anonymous access. |
-| Tele-proxy | `/api/health` | 200 | Anonymous constant `{"ok":true}` response proves the public gateway listener answers. It does not check providers, routing, storage, collectors, or traces. |
-| Tele-proxy | `/` | 200 or 307 | Public UI or its redirect answers; not an authenticated workflow test. |
-| Tele-proxy | `/v1/models` | 401 | Protected API rejects an anonymous request; not a model/provider availability test. |
-| Grafana | `https://grafana.vnibb.xyz/api/health` | 200 | Grafana's health handler answers; not proof that every datasource, exporter or dashboard query works. |
-| Grafana | `/api/datasources` | 401 | Anonymous requests cannot list datasource configuration. |
-| Langfuse | `https://langfuse.vnibb.xyz/api/public/health` | 200 | Langfuse liveness handler answers; no trace-ingestion or completeness claim. |
-| Langfuse | `/api/public/ready` | 200 | Langfuse's declared readiness handler passes; no end-to-end producer/export/trace guarantee. |
-| Keith Digital Garden | `https://kohnnn.github.io/keith-digital-garden/` | 200 | Public knowledge garden is available. |
-| Mechanical Watch | `https://kohnnn.github.io/interactive-explanation/mechanical-watch/` | 200 | Public interactive explainer is available. |
-| AutoScientist | `https://adaptions-writeup.vercel.app/` | 200 | Public project write-up is available. |
-| F1 Racing | `https://f1-demo.netlify.app/` | 200 | Public telemetry demo is available. |
-| Chords Lab | `https://chords-lab-app.netlify.app/` | 200 | Public music-theory app is available. |
-
-An expected 401 is a successful security check, not downtime. These checks require no credentials and must remain anonymous.
+[COVERAGE.md](COVERAGE.md) lists the generated public checks and their meaning. Each check uses an explicit slug for stable history. An expected 401 means an anonymous access boundary passed.
 
 ## Monitoring boundary
 
@@ -54,23 +30,25 @@ curl -fsS http://127.0.0.1:8081/health/ready
 
 Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its own runner.
 
-## Status-page design
+## Status data and publishing
 
-`assets/openai-status.css` is the visual source of truth. `.upptimerc.yml` loads it through `status-website.themeUrl`. The design intentionally uses a narrow white canvas, restrained typography, one prominent overall-status banner, and compact component rows. Preserve Upptime's generated semantic HTML and accessibility; prefer CSS changes over custom JavaScript or a replacement frontend.
+The public status page gets group names, descriptions, check results, history and evidence times from one versioned JSON snapshot. The Status data workflow builds it from one checkout of `master` and a completed Uptime CI run, then publishes it to the `status-data` branch. The browser refreshes that file every minute and retains the last available snapshot if a refresh fails.
 
-`assets/uptime-bars.js` is the data-driven exception. It groups generated component articles into native expandable product sections, reads Upptime's public `history/summary.json` and per-service `startTime`/`lastUpdated`, then renders daily states for products and components over the selected 30-day, 1-year, or all-time range. Keep VNIBB, Gampo, Research Wiki, 9Router, Tele-proxy, Grafana and Langfuse before the collapsed Other projects group. Primary groups with an outage or missing fresh evidence open automatically; Other projects stays collapsed by default. Keep pre-monitoring days and days after the last sample gray. Upptime records operational and outage time, not latency degradation, so the strip must not infer degraded states from response time.
+Upptime writes history timestamps on status changes and response-time runs. When the same probe contract exists at the latest successful Uptime CI run's commit and there is a saved record for its URL, the snapshot can use the run start as conservative evidence. A warning appears after 20 minutes. A last-known outage remains visible beside its evidence age. Incident-free days are counted from Upptime history.
 
-The page displays monitoring-evidence age. Upptime v1.46.5 writes `lastUpdated` only for a status change or a response-time run, so it is **not** the last five-minute probe time. The page also reads the latest successful completed `Uptime CI` run through GitHub's public API and checks the configuration at that run's exact commit. Only an exact name/URL match can use the run's start time as conservative monitoring evidence. A run before a new endpoint was added cannot freshen that endpoint. No credentials are used; API failure/rate limiting falls back to saved record evidence, never fabricated freshness.
+Static Site CI publishes only from `master` on source changes, its daily schedule or a manual dispatch. Pull requests run read-only catalog, snapshot and UI tests. The previous setup and template regeneration workflows have been retired because template regeneration would replace the publishing guard. Update Upptime workflow versions in a reviewed PR and preserve the production branch check. Existing Uptime, Response Time, Summary and Graphs jobs continue to run.
 
-Evidence over 20 minutes old, invalid/missing timestamps, and clocks more than one minute ahead produce a freshness warning and an unknown group status. This is a display threshold, not an outage declaration or alert-delivery guarantee. A one-minute browser timer ages the loaded evidence; reload to obtain newer records/runs. Historical incident totals remain recorded history. Investigate actual Actions runs and the existing independent private monitor before attributing missing fresh evidence to a scheduler failure.
+## Tele-proxy contract pilot
 
-After changing the stylesheet or uptime-bar script, push `master`, run `Static Site CI`, wait for the Pages deployment, then verify desktop and mobile layouts in a browser. Check the operational, degraded, active-incident, and history-page states before changing selectors that target `article.up`, `article.down`, `article.degraded`, or `.live-status`.
+The Tele-proxy owning repo stores the public contract in `ops/public-status-contract.json`. After its change is reviewed, copy those public bytes into `contracts/tele-proxy.json` in a branch here, run `python3 scripts/status_data.py sync`, and open a PR for the resulting diff. The sync command projects the Tele-proxy checks into Upptime and regenerates coverage. The snapshot reads the same metadata for the UI. A changed label keeps its slug, and removal of an existing slug requires an explicit migration. Review the export before copying because the destination repository is public.
+
+For other services, edit `.upptimerc.yml` and `catalog.yml`, then run the same sync command to regenerate coverage. A missing or duplicated check fails validation.
 
 ## Change a domain
 
 1. Confirm the new public domain resolves and its Cloudflare tunnel is active.
 2. Probe every path in the inventory anonymously and record its HTTP code.
-3. Replace every old-domain `url` in `.upptimerc.yml`; preserve paths and expected codes unless the application contract changed.
+3. Update the existing check URLs and keep their slugs. For Tele-proxy, update the owning contract and sync its export.
 4. Validate YAML and inspect the diff.
 5. Push to `master`, manually run `Uptime CI`, then run `Static Site CI`.
 6. Confirm histories use the new URLs and no false incident remains open.
@@ -81,52 +59,26 @@ Each entry needs a unique stable `name`, a public HTTPS `url`, an explicit `expe
 
 Never place API keys, cookies, passwords, tunnel tokens, or Authorization headers in this public repository. If a future check truly requires authentication, use a least-privilege GitHub Actions secret and document its rotation separately without recording its value.
 
-Removing or renaming a check changes generated history identifiers. Preserve the name when only its domain changes so its uptime history remains continuous.
+Keep the explicit slug when updating a label or domain. Review history retention before retiring a slug.
 
 ## Validation
 
-Run before every configuration push:
+Run before changing monitor configuration or the status page:
 
 ```bash
-python3 - <<'PY'
-import yaml
-with open('.upptimerc.yml', encoding='utf-8') as stream:
-    yaml.safe_load(stream)
-print('YAML OK')
-PY
+python3 scripts/status_data.py check
+python3 tests/status_data_test.py
+node --test tests/uptime-bars.test.js
 git diff --check
-git status --short
 ```
 
-Probe configured behavior from an external network when possible:
-
-```bash
-curl -sS -o /dev/null -w '%{http_code}\n' https://vnibb-web.vercel.app/dashboard
-curl -sS -o /dev/null -w '%{http_code}\n' https://gampo-educational-simulator.netlify.app
-curl -sS -o /dev/null -w '%{http_code}\n' https://research.vnibb.xyz/health/live
-curl -sS -o /dev/null -w '%{http_code}\n' https://research.vnibb.xyz/health/ready
-curl -sS -o /dev/null -w '%{http_code}\n' https://research.vnibb.xyz/
-curl -sS -o /dev/null -w '%{http_code}\n' https://research.vnibb.xyz/mcp/research-brain/
-curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/
-curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/api/health
-curl -sS -o /dev/null -w '%{http_code}\n' https://9router.vnibb.xyz/v1/models
-curl -sS -o /dev/null -w '%{http_code}\n' https://tele-proxy.vnibb.xyz/api/health
-curl -sS -o /dev/null -w '%{http_code}\n' https://kohnnn.github.io/keith-digital-garden/
-curl -sS -o /dev/null -w '%{http_code}\n' https://kohnnn.github.io/interactive-explanation/mechanical-watch/
-curl -sS -o /dev/null -w '%{http_code}\n' https://adaptions-writeup.vercel.app/
-curl -sS -o /dev/null -w '%{http_code}\n' https://f1-demo.netlify.app/
-curl -sS -o /dev/null -w '%{http_code}\n' https://chords-lab-app.netlify.app/
-```
-
-The examples above cover the original fifteen checks. The complete, current probe list and expected codes are in `.upptimerc.yml`, including the six checks added on 17 November. Probe those too before publishing; use anonymous requests with a finite timeout and preserve their explicit status contracts.
-
-Run `node tests/uptime-bars.test.js` and `node --check assets/uptime-bars.js` after changing grouping or freshness behavior.
+The Python scripts use PyYAML. Probe changed endpoints anonymously with a finite timeout and verify their declared HTTP codes. After the workflows run, verify the live groups, snapshot source revision, and relevant history links.
 
 ## GitHub administration
 
 Upptime requires Actions workflow write permission so scheduled checks can update history and incident Issues. GitHub Pages publishes from the `gh-pages` branch after `Static Site CI` succeeds. A repository custom status domain is optional; without one the site uses `/service-status` on the account's GitHub Pages domain.
 
-When workflows fail, fix `.upptimerc.yml` or template configuration first. Edit generated workflows only when upgrading or repairing the Upptime template itself.
+The Pages publishing job retains the repository's existing GitHub App or PAT authentication. The snapshot job uses the repository workflow token to write only the generated data branch.
 
 ## Agent completion criteria
 

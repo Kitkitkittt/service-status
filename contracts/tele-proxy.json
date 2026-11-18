@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "group": {
+    "id": "tele-proxy",
+    "title": "Tele-proxy"
+  },
+  "checks": [
+    {
+      "slug": "tele-proxy-api-health",
+      "name": "Tele-proxy API Health",
+      "url": "https://tele-proxy.vnibb.xyz/api/health",
+      "expectedStatusCodes": [
+        200
+      ],
+      "timeout": 15000,
+      "description": "The public gateway listener answers."
+    },
+    {
+      "slug": "tele-proxy-web-ui",
+      "name": "Tele-proxy Web UI",
+      "url": "https://tele-proxy.vnibb.xyz/",
+      "expectedStatusCodes": [
+        200,
+        307
+      ],
+      "timeout": 15000,
+      "description": "The web entry point or its redirect answers."
+    },
+    {
+      "slug": "tele-proxy-api-auth-boundary",
+      "name": "Tele-proxy API Auth Boundary",
+      "url": "https://tele-proxy.vnibb.xyz/v1/models",
+      "expectedStatusCodes": [
+        401
+      ],
+      "timeout": 15000,
+      "description": "The models API rejects requests without credentials."
+    }
+  ]
+}

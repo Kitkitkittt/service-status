@@ -1,0 +1,29 @@
+groups:
+  vnibb: VNIBB
+  gampo: Gampo
+  research-wiki: Research Wiki
+  9router: 9Router
+  grafana: Grafana
+  langfuse: Langfuse
+  other-projects: Other projects
+
+# Tele-proxy entries come from the owning repo's reviewed export.
+checks:
+  vnibb-dashboard: [vnibb, The public analytics dashboard responds.]
+  gampo-simulator: [gampo, The public education simulator responds.]
+  research-wiki-liveness: [research-wiki, The Wiki listener answers.]
+  research-wiki-readiness: [research-wiki, The Wiki reports its dependencies ready.]
+  research-wiki-application-auth-boundary: [research-wiki, The Wiki rejects anonymous application access.]
+  research-wiki-mcp-auth-boundary: [research-wiki, The Wiki rejects anonymous MCP access.]
+  9-router-web-ui: [9router, The router web entry point or its redirect answers.]
+  9-router-api-health: [9router, The router API listener answers.]
+  9-router-api-auth-boundary: [9router, The router rejects anonymous access to models.]
+  grafana-api-health: [grafana, The Grafana health handler answers.]
+  grafana-api-auth-boundary: [grafana, Grafana rejects anonymous access to datasource configuration.]
+  langfuse-liveness: [langfuse, The Langfuse listener answers.]
+  langfuse-readiness: [langfuse, Langfuse reports its dependencies ready.]
+  keith-digital-garden: [other-projects, The public knowledge garden responds.]
+  mechanical-watch-explainer: [other-projects, The interactive watch explainer responds.]
+  auto-scientist-write-up: [other-projects, The public project write-up responds.]
+  f1-racing-demo: [other-projects, The public telemetry demo responds.]
+  chords-lab: [other-projects, The public music theory app responds.]
