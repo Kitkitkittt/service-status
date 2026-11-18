@@ -36,6 +36,8 @@ The public status page gets group names, descriptions, check results, history an
 
 Upptime writes history timestamps on status changes and response-time runs. When the same probe contract exists at the latest successful Uptime CI run's commit and there is a saved record for its URL, the snapshot can use the run start as conservative evidence. A warning appears after 20 minutes. A last-known outage remains visible beside its evidence age. Incident-free days are counted from Upptime history.
 
+The Performance view uses recorded response times from Upptime commits for each check slug. It includes positive durations for passing or degraded checks with an expected HTTP response. Failed checks stay in the Uptime view. Days are UTC and the period average weights each recorded sample equally. Gaps mark days with no recorded timing. Upptime records timings during response-time runs and status transitions, so these charts measure sampled public HTTP latency. The last successful sample time remains visible when the selected range has no timings.
+
 Static Site CI publishes only from `master` on source changes, its daily schedule or a manual dispatch. Pull requests run read-only catalog, snapshot and UI tests. The previous setup and template regeneration workflows have been retired because template regeneration would replace the publishing guard. Update Upptime workflow versions in a reviewed PR and preserve the production branch check. Existing Uptime, Response Time, Summary and Graphs jobs continue to run.
 
 ## Tele-proxy contract pilot

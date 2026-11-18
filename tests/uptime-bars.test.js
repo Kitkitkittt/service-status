@@ -7,6 +7,7 @@ const {
   periodDays,
   periodLabel,
   sampleFreshness,
+  timingWindow,
   groupStatus,
 } = require("../assets/uptime-bars.js");
 
@@ -52,5 +53,13 @@ assert.equal(periodDays("all", "2025-08-20", new Date("2026-08-23T12:00:00Z")), 
 assert.equal(periodLabel("month"), "30-day history");
 assert.equal(periodLabel("all"), "Available history");
 assert.equal(periodLabel("all", "2025-08-20"), "All-time history");
+
+const timings = { days: [["2026-10-01", 1, 500], ["2026-11-14", 1, 600], ["2026-11-17", 3, 600]] };
+const month = timingWindow(timings, "month", now);
+assert.equal(month.count, 4);
+assert.equal(month.mean, 300);
+assert.deepEqual(month.points.map(({ day, index }) => [day, index]), [["2026-11-14", 26], ["2026-11-17", 29]]);
+assert.equal(timingWindow(timings, "all", now).count, 5);
+assert.equal(timingWindow(undefined, "month", now).mean, null);
 
 console.log("uptime bar checks passed");

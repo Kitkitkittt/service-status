@@ -15,6 +15,7 @@ COVERAGE = Path("COVERAGE.md")
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 FENCE = "<!-- generated public checks -->"
 PROBE_KEYS = ("name", "slug", "url", "expectedStatusCodes", "timeout")
+TIMING_RECEIPT = re.compile(r" is (?:up|degraded) \((\d{3}) in (\d+) ms\) \[skip ci\] \[upptime\]$")
 
 
 def require(condition, message):
@@ -132,6 +133,37 @@ def contract_key(site):
     return {key: value for key, value in site.items() if key not in ("slug", "name")}
 
 
+def performance_history(source_sha, site, path):
+    # Upptime records timings when status changes and on response-time runs.
+    # A successful Uptime CI run alone creates no latency measurement.
+    log = subprocess.check_output(
+        ["git", "log", "--no-merges", "--format=%aI%x09%s", source_sha, "--", str(path)],
+        text=True,
+    )
+    days = {}
+    latest = None
+    expected = set(site["expectedStatusCodes"])
+    for line in log.splitlines():
+        date, _, subject = line.partition("\t")
+        match = TIMING_RECEIPT.search(subject)
+        if not match or int(match[1]) not in expected:
+            continue
+        recorded_at = datetime.fromisoformat(date).astimezone(timezone.utc)
+        duration = int(match[2])
+        if duration <= 0:
+            continue
+        day = recorded_at.date().isoformat()
+        count, total = days.get(day, (0, 0))
+        days[day] = (count + 1, total + duration)
+        if latest is None or recorded_at > latest[0]:
+            latest = (recorded_at, duration)
+    return {
+        "days": [[date, *days[date]] for date in sorted(days)],
+        "latestAt": timestamp(latest[0]) if latest else None,
+        "latestMs": latest[1] if latest else None,
+    }
+
+
 def snapshot(sites, metadata, source_sha, run):
     old_sites = []
     run_time = None
@@ -163,6 +195,7 @@ def snapshot(sites, metadata, source_sha, run):
             "lastUpdated": saved_time, "lastEvidenceAt": evidence, "startDay": start[:10] if start else None,
             "dailyMinutesDown": row.get("dailyMinutesDown", {}),
             "uptime": row.get("uptime"), "time": row.get("time"),
+            "performance": performance_history(source_sha, site, path),
         })
     return {"schemaVersion": 1, "sourceSha": source_sha,
             "monitor": {"runId": run["id"], "sourceSha": run["head_sha"], "startedAt": run_time} if run else None,

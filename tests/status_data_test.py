@@ -58,6 +58,44 @@ class StatusDataTest(unittest.TestCase):
             self.assertIn("Tele-proxy Fixture", (repo / "COVERAGE.md").read_text())
             self.assertEqual(records["tele-proxy-web-ui"]["lastEvidenceAt"], receipt["run_started_at"])
 
+    def test_performance_excludes_failed_and_unrelated_commits(self):
+        with TemporaryDirectory() as directory:
+            repo = Path(directory)
+            for name in (".upptimerc.yml", "catalog.yml", "COVERAGE.md"):
+                shutil.copy(ROOT / name, repo)
+            for name in ("history", "contracts"):
+                shutil.copytree(ROOT / name, repo / name)
+
+            def run(*args):
+                return subprocess.check_output(args, cwd=repo, text=True)
+
+            run("git", "init", "-q")
+            run("git", "config", "user.name", "Monitor test")
+            run("git", "config", "user.email", "test@example.invalid")
+            run("git", "add", ".")
+            run("git", "commit", "-qm", "Initial monitoring catalog")
+            path = repo / "history/tele-proxy-api-auth-boundary.yml"
+            cases = [
+                ("2026-11-15T23:30:00-02:00", "is up (401 in 100 ms) [skip ci] [upptime]"),
+                ("2026-11-16T05:00:00Z", "is degraded (401 in 300 ms) [skip ci] [upptime]"),
+                ("2026-11-17T04:00:00Z", "is down (530 in 40 ms) [skip ci] [upptime]"),
+                ("2026-11-17T05:00:00Z", "is up (200 in 9 ms) [skip ci] [upptime]"),
+                ("2026-11-17T06:00:00Z", "Document service response (401 in 1 ms)"),
+            ]
+            for index, (date, message) in enumerate(cases):
+                with path.open("a") as file:
+                    file.write(f"\n# revision {index}\n")
+                run("git", "commit", "-q", f"--date={date}", "-m", f"Tele-proxy {message}", "--", str(path))
+
+            run("python3", str(ROOT / "scripts/status_data.py"), "snapshot", "--output", "status.json")
+            records = json.loads((repo / "status.json").read_text())["checks"]
+            auth = next(record for record in records if record["slug"] == "tele-proxy-api-auth-boundary")
+            self.assertEqual(auth["performance"], {
+                "days": [["2026-11-16", 2, 400]],
+                "latestAt": "2026-11-16T05:00:00Z",
+                "latestMs": 300,
+            })
+
     def test_pages_and_snapshot_publication_require_master(self):
         workflows = ROOT / ".github/workflows"
         site = yaml.load((workflows / "site.yml").read_text(), Loader=yaml.BaseLoader)
