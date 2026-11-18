@@ -293,6 +293,8 @@
   }
 
   function start() {
+    if (document.documentElement.dataset.statusSnapshot === "enabled") return;
+    document.documentElement.dataset.statusSnapshot = "enabled";
     new MutationObserver(render).observe(document.body, { childList: true, subtree: true });
     document.addEventListener("change", (event) => {
       if (event.target.matches('input[name="d"]')) render();
