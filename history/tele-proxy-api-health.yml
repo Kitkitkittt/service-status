@@ -1,7 +1,7 @@
 url: https://tele-proxy.vnibb.xyz/api/health
-status: down
-code: 530
-responseTime: 133
-lastUpdated: 2026-11-18T04:01:57.368Z
+status: up
+code: 200
+responseTime: 1096
+lastUpdated: 2026-11-18T07:49:29.680Z
 startTime: 2026-11-10T09:39:31.803Z
 generator: Upptime <https://github.com/upptime/upptime>
