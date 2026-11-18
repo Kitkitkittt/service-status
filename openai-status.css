@@ -753,6 +753,152 @@ footer a {
   text-align: right;
 }
 
+.monitoring-mode {
+  display: inline-flex;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 12px;
+  padding: 3px;
+  border: 1px solid #d8dce6;
+  border-radius: 9px;
+  background: #f7f8fc;
+}
+
+.monitoring-mode button {
+  min-height: 36px;
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #42495a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 570;
+}
+
+.monitoring-mode button[aria-pressed="true"] {
+  background: #fff;
+  color: #5143a8;
+  box-shadow: 0 1px 3px #1e25401f;
+}
+
+.monitoring-mode button:focus-visible {
+  outline: 2px solid #5143a8;
+  outline-offset: 2px;
+}
+
+.performance-group .service-group__summary {
+  min-height: 58px;
+}
+
+.performance-group__coverage {
+  color: #666b79;
+  font-size: 12px;
+  text-align: right;
+}
+
+.live-status article.performance-check {
+  display: block;
+}
+
+.live-status article > .performance-check__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-left: 0;
+  text-align: left;
+}
+
+.live-status .performance-check h4::before,
+.live-status .performance-check h4::after {
+  content: none;
+}
+
+.live-status .performance-check h4 a {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.timing-stats,
+.timing-empty,
+.timing-latest,
+.timing-axis,
+.timing-dates {
+  margin: 0;
+  color: #666b79;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timing-stats {
+  color: #5143a8;
+  font-weight: 570;
+}
+
+.live-status article > .timing-chart {
+  display: block;
+  margin-top: 12px;
+  margin-left: 0;
+  text-align: left;
+}
+
+.timing-plot {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.timing-axis,
+.timing-dates {
+  display: flex;
+  justify-content: space-between;
+}
+
+.timing-axis {
+  flex-direction: column;
+}
+
+.timing-plot svg {
+  width: 100%;
+  height: 88px;
+  margin: 0;
+}
+
+.timing-dates {
+  margin: 3px 0 0 62px;
+}
+
+.timing-grid {
+  stroke: #e3e5ef;
+  vector-effect: non-scaling-stroke;
+}
+
+.timing-line {
+  stroke: #6655c3;
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.timing-dot {
+  fill: #6655c3;
+}
+
+.timing-latest {
+  margin-top: 9px;
+}
+
+@media (max-width: 560px) {
+  .performance-group__coverage {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: left;
+  }
+}
+
 @media (max-width: 520px) {
   .live-status article > .check-metrics {
     grid-column: 1 / -1;
