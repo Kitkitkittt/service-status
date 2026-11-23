@@ -21,11 +21,9 @@ If a `swarm-ready` skill is installed, load it. Otherwise execute the documented
 
 ## Repository starting point
 
-Read: [AGENTS.md](AGENTS.md), [README.md](README.md), [tests](tests), [scripts](scripts), [.github](.github).
+Start with [AGENTS.md](AGENTS.md) and [OPERATIONS.md](OPERATIONS.md). The runbook owns monitor configuration, publishing, and live acceptance. [README.md](README.md) includes generated status rows, not a setup guide.
 
-Continue issue #84's genuine automatic-observation freshness work. Keep stale monitoring distinct from service outages and preserve observed history.
-
-Treat scheduled monitors and publishers as state-changing operations, not a test suite. Use existing offline checks for docs/code; acceptance of scheduling requires real repeated probes and matching published observations.
+The documentation scope is local source and fixture checks only. Leave endpoints, schedules, incident issues, generated history, and publishers unchanged. [#84](https://github.com/Kitkitkittt/service-status/issues/84) separately tracks automatic-observation freshness: stale monitoring is not evidence of a service outage. The issue requires consecutive automatic probes and matching published snapshots; a local check does not satisfy it.
 
 The base above is an inspection snapshot, not a permanent working branch. Refresh the actual target branch, current issues, incumbent worker and applicable nested instructions before editing. Preserve unrelated changes and upstream/fork boundaries.
 
@@ -41,7 +39,16 @@ The base above is an inspection snapshot, not a permanent working branch. Refres
 
 ## Verification starting point
 
-No executable acceptance command was established by this bounded source inspection. Read `AGENTS.md`, `README.md`, `tests`, `scripts`, `.github` and record the narrowest existing check before implementation. Do not invent a `test` command or infer that the repository has no tests from this gap. For a documentation-only task, check links, factual source anchors and whitespace; do not build unrelated application code.
+Use the offline portion of [Operations → Validation](OPERATIONS.md#validation) from the checkout root:
+
+```bash
+python3 scripts/status_data.py check
+python3 tests/status_data_test.py
+node --test tests/uptime-bars.test.js
+git diff --check
+```
+
+The Python checks need PyYAML (the [PR workflow](.github/workflows/status-data.yml) pins `6.0.3`). They validate the tracked catalog and coverage and use local Git fixtures; the Node tests exercise the uptime rendering logic. These checks do not query monitored endpoints or publish anything. Report the final diff and link checks separately from any fixture results.
 
 ## Required handoff result
 
