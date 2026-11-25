@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceSha": "c08d1e3fef4646055ebd6afa96bdc26d3c8c04c4",
+  "sourceSha": "9cc21feaf223a1267973c847e4624dc2cab51080",
   "monitor": {
     "runId": 45535802951,
     "sourceSha": "c08d1e3fef4646055ebd6afa96bdc26d3c8c04c4",
@@ -47,8 +47,8 @@
       "group": "vnibb",
       "description": "The public analytics dashboard responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:43:20.743000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:13:20.547000Z",
+      "lastEvidenceAt": "2026-11-25T05:13:20.547000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -514,10 +514,15 @@
             "2026-11-24",
             1,
             241
+          ],
+          [
+            "2026-11-25",
+            1,
+            215
           ]
         ],
-        "latestAt": "2026-11-24T06:43:20Z",
-        "latestMs": 241
+        "latestAt": "2026-11-25T05:13:20Z",
+        "latestMs": 215
       }
     },
     {
@@ -526,8 +531,8 @@
       "group": "gampo",
       "description": "The public education simulator responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:43:21.278000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:13:20.943000Z",
+      "lastEvidenceAt": "2026-11-25T05:13:20.943000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -993,10 +998,15 @@
             "2026-11-24",
             1,
             486
+          ],
+          [
+            "2026-11-25",
+            1,
+            366
           ]
         ],
-        "latestAt": "2026-11-24T06:43:21Z",
-        "latestMs": 486
+        "latestAt": "2026-11-25T05:13:20Z",
+        "latestMs": 366
       }
     },
     {
@@ -1005,8 +1015,8 @@
       "group": "research-wiki",
       "description": "The Wiki listener answers.",
       "status": "down",
-      "lastUpdated": "2026-11-24T06:43:35.056000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:13:35.217000Z",
+      "lastEvidenceAt": "2026-11-25T05:13:35.217000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -1337,8 +1347,8 @@
       "group": "research-wiki",
       "description": "The Wiki reports its dependencies ready.",
       "status": "down",
-      "lastUpdated": "2026-11-24T06:43:48.716000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:13:49.006000Z",
+      "lastEvidenceAt": "2026-11-25T05:13:49.006000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -1639,8 +1649,8 @@
       "group": "research-wiki",
       "description": "The Wiki rejects anonymous application access.",
       "status": "down",
-      "lastUpdated": "2026-11-24T06:44:01.751000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:02.317000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:02.317000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 507,
@@ -1971,8 +1981,8 @@
       "group": "research-wiki",
       "description": "The Wiki rejects anonymous MCP access.",
       "status": "down",
-      "lastUpdated": "2026-11-24T06:44:14.852000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:16.181000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:16.181000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 935,
@@ -2303,8 +2313,8 @@
       "group": "9router",
       "description": "The router web entry point or its redirect answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:16.312000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:18.804000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:18.804000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -2781,10 +2791,15 @@
             "2026-11-24",
             1,
             1429
+          ],
+          [
+            "2026-11-25",
+            1,
+            2604
           ]
         ],
-        "latestAt": "2026-11-24T06:44:16Z",
-        "latestMs": 1429
+        "latestAt": "2026-11-25T05:14:18Z",
+        "latestMs": 2604
       }
     },
     {
@@ -2793,8 +2808,8 @@
       "group": "9router",
       "description": "The router API listener answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:16.844000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:19.563000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:19.563000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -3271,10 +3286,15 @@
             "2026-11-24",
             1,
             501
+          ],
+          [
+            "2026-11-25",
+            1,
+            739
           ]
         ],
-        "latestAt": "2026-11-24T06:44:16Z",
-        "latestMs": 501
+        "latestAt": "2026-11-25T05:14:19Z",
+        "latestMs": 739
       }
     },
     {
@@ -3283,8 +3303,8 @@
       "group": "9router",
       "description": "The router rejects anonymous access to models.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:17.529000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:20.707000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:20.707000Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -3761,10 +3781,15 @@
             "2026-11-24",
             1,
             652
+          ],
+          [
+            "2026-11-25",
+            1,
+            1124
           ]
         ],
-        "latestAt": "2026-11-24T06:44:17Z",
-        "latestMs": 652
+        "latestAt": "2026-11-25T05:14:20Z",
+        "latestMs": 1124
       }
     },
     {
@@ -3773,8 +3798,8 @@
       "group": "tele-proxy",
       "description": "The public gateway listener answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:18.103000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:21.429000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:21.429000Z",
       "startDay": "2026-11-10",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -3857,10 +3882,15 @@
             "2026-11-24",
             1,
             544
+          ],
+          [
+            "2026-11-25",
+            1,
+            703
           ]
         ],
-        "latestAt": "2026-11-24T06:44:18Z",
-        "latestMs": 544
+        "latestAt": "2026-11-25T05:14:21Z",
+        "latestMs": 703
       }
     },
     {
@@ -3869,8 +3899,8 @@
       "group": "tele-proxy",
       "description": "The web entry point or its redirect answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:19.706000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:24.083000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:24.083000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -3918,10 +3948,15 @@
             "2026-11-24",
             1,
             1573
+          ],
+          [
+            "2026-11-25",
+            1,
+            2634
           ]
         ],
-        "latestAt": "2026-11-24T06:44:19Z",
-        "latestMs": 1573
+        "latestAt": "2026-11-25T05:14:24Z",
+        "latestMs": 2634
       }
     },
     {
@@ -3930,8 +3965,8 @@
       "group": "tele-proxy",
       "description": "The models API rejects requests without credentials.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:19.960000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:24.855000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:24.855000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -3979,10 +4014,15 @@
             "2026-11-24",
             1,
             222
+          ],
+          [
+            "2026-11-25",
+            1,
+            753
           ]
         ],
-        "latestAt": "2026-11-24T06:44:19Z",
-        "latestMs": 222
+        "latestAt": "2026-11-25T05:14:24Z",
+        "latestMs": 753
       }
     },
     {
@@ -3991,8 +4031,8 @@
       "group": "grafana",
       "description": "The Grafana health handler answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:20.598000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:25.572000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:25.572000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4040,10 +4080,15 @@
             "2026-11-24",
             1,
             607
+          ],
+          [
+            "2026-11-25",
+            1,
+            697
           ]
         ],
-        "latestAt": "2026-11-24T06:44:20Z",
-        "latestMs": 607
+        "latestAt": "2026-11-25T05:14:25Z",
+        "latestMs": 697
       }
     },
     {
@@ -4052,8 +4097,8 @@
       "group": "grafana",
       "description": "Grafana rejects anonymous access to datasource configuration.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:21.143000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:26.316000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:26.316000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4101,10 +4146,15 @@
             "2026-11-24",
             1,
             514
+          ],
+          [
+            "2026-11-25",
+            1,
+            724
           ]
         ],
-        "latestAt": "2026-11-24T06:44:21Z",
-        "latestMs": 514
+        "latestAt": "2026-11-25T05:14:26Z",
+        "latestMs": 724
       }
     },
     {
@@ -4113,8 +4163,8 @@
       "group": "langfuse",
       "description": "The Langfuse listener answers.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:22.220000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:27.051000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:27.051000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 349
@@ -4162,10 +4212,15 @@
             "2026-11-24",
             1,
             1045
+          ],
+          [
+            "2026-11-25",
+            1,
+            715
           ]
         ],
-        "latestAt": "2026-11-24T06:44:22Z",
-        "latestMs": 1045
+        "latestAt": "2026-11-25T05:14:27Z",
+        "latestMs": 715
       }
     },
     {
@@ -4174,8 +4229,8 @@
       "group": "langfuse",
       "description": "Langfuse reports its dependencies ready.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:22.782000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:27.757000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:27.757000Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 349
@@ -4223,10 +4278,15 @@
             "2026-11-24",
             1,
             531
+          ],
+          [
+            "2026-11-25",
+            1,
+            686
           ]
         ],
-        "latestAt": "2026-11-24T06:44:22Z",
-        "latestMs": 531
+        "latestAt": "2026-11-25T05:14:27Z",
+        "latestMs": 686
       }
     },
     {
@@ -4235,8 +4295,8 @@
       "group": "other-projects",
       "description": "The public knowledge garden responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:22.965000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:27.834000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:27.834000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -4702,10 +4762,15 @@
             "2026-11-24",
             1,
             151
+          ],
+          [
+            "2026-11-25",
+            1,
+            57
           ]
         ],
-        "latestAt": "2026-11-24T06:44:22Z",
-        "latestMs": 151
+        "latestAt": "2026-11-25T05:14:27Z",
+        "latestMs": 57
       }
     },
     {
@@ -4714,8 +4779,8 @@
       "group": "other-projects",
       "description": "The interactive watch explainer responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:23.152000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:27.926000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:27.926000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5181,10 +5246,15 @@
             "2026-11-24",
             1,
             148
+          ],
+          [
+            "2026-11-25",
+            1,
+            67
           ]
         ],
-        "latestAt": "2026-11-24T06:44:23Z",
-        "latestMs": 148
+        "latestAt": "2026-11-25T05:14:27Z",
+        "latestMs": 67
       }
     },
     {
@@ -5193,8 +5263,8 @@
       "group": "other-projects",
       "description": "The public project write-up responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:23.289000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:27.976000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:27.976000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5660,10 +5730,15 @@
             "2026-11-24",
             1,
             105
+          ],
+          [
+            "2026-11-25",
+            1,
+            33
           ]
         ],
-        "latestAt": "2026-11-24T06:44:23Z",
-        "latestMs": 105
+        "latestAt": "2026-11-25T05:14:27Z",
+        "latestMs": 33
       }
     },
     {
@@ -5672,8 +5747,8 @@
       "group": "other-projects",
       "description": "The public telemetry demo responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:23.913000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:28.393000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:28.393000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -6139,10 +6214,15 @@
             "2026-11-24",
             1,
             594
+          ],
+          [
+            "2026-11-25",
+            1,
+            400
           ]
         ],
-        "latestAt": "2026-11-24T06:44:23Z",
-        "latestMs": 594
+        "latestAt": "2026-11-25T05:14:28Z",
+        "latestMs": 400
       }
     },
     {
@@ -6151,8 +6231,8 @@
       "group": "other-projects",
       "description": "The public music theory app responds.",
       "status": "up",
-      "lastUpdated": "2026-11-24T06:44:24.367000Z",
-      "lastEvidenceAt": "2026-11-25T02:50:34Z",
+      "lastUpdated": "2026-11-25T05:14:28.714000Z",
+      "lastEvidenceAt": "2026-11-25T05:14:28.714000Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -6618,10 +6698,15 @@
             "2026-11-24",
             1,
             423
+          ],
+          [
+            "2026-11-25",
+            1,
+            302
           ]
         ],
-        "latestAt": "2026-11-24T06:44:24Z",
-        "latestMs": 423
+        "latestAt": "2026-11-25T05:14:28Z",
+        "latestMs": 302
       }
     }
   ]
