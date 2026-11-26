@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "sourceSha": "b5ea1bb18e1ff04533a4eb66f8e19590bcb7c66d",
   "monitor": {
-    "runId": 45819737246,
+    "runId": 45900734629,
     "sourceSha": "b5ea1bb18e1ff04533a4eb66f8e19590bcb7c66d",
-    "startedAt": "2026-11-26T12:26:58Z"
+    "startedAt": "2026-11-26T21:49:27Z"
   },
   "groups": [
     {
@@ -48,7 +48,7 @@
       "description": "The public analytics dashboard responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:41:35.784000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -537,7 +537,7 @@
       "description": "The public education simulator responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:41:36.324000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -1026,7 +1026,7 @@
       "description": "The Wiki listener answers.",
       "status": "down",
       "lastUpdated": "2026-11-26T04:41:50.553000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -1360,7 +1360,7 @@
       "description": "The Wiki reports its dependencies ready.",
       "status": "down",
       "lastUpdated": "2026-11-26T04:42:04.121000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 1140,
@@ -1664,7 +1664,7 @@
       "description": "The Wiki rejects anonymous application access.",
       "status": "down",
       "lastUpdated": "2026-11-26T04:42:16.974000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 507,
@@ -1998,7 +1998,7 @@
       "description": "The Wiki rejects anonymous MCP access.",
       "status": "down",
       "lastUpdated": "2026-11-26T04:42:30.071000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-09-03": 935,
@@ -2332,7 +2332,7 @@
       "description": "The router web entry point or its redirect answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:33.383000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -2832,7 +2832,7 @@
       "description": "The router API listener answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:34.669000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -3332,7 +3332,7 @@
       "description": "The router rejects anonymous access to models.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:34.943000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-23",
       "dailyMinutesDown": {
         "2026-10-29": 125,
@@ -3832,7 +3832,7 @@
       "description": "The public gateway listener answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:35.568000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-10",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -3938,7 +3938,7 @@
       "description": "The web entry point or its redirect answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:37.022000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4009,7 +4009,7 @@
       "description": "The models API rejects requests without credentials.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:37.295000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4080,7 +4080,7 @@
       "description": "The Grafana health handler answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:37.918000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4151,7 +4151,7 @@
       "description": "Grafana rejects anonymous access to datasource configuration.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:38.519000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 350
@@ -4222,7 +4222,7 @@
       "description": "The Langfuse listener answers.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:39.170000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 349
@@ -4293,7 +4293,7 @@
       "description": "Langfuse reports its dependencies ready.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:39.464000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-11-17",
       "dailyMinutesDown": {
         "2026-11-18": 349
@@ -4364,7 +4364,7 @@
       "description": "The public knowledge garden responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:39.802000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -4853,7 +4853,7 @@
       "description": "The interactive watch explainer responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:40.139000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5342,7 +5342,7 @@
       "description": "The public project write-up responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:40.406000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -5831,7 +5831,7 @@
       "description": "The public telemetry demo responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:40.922000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
@@ -6320,7 +6320,7 @@
       "description": "The public music theory app responds.",
       "status": "up",
       "lastUpdated": "2026-11-26T04:42:41.327000Z",
-      "lastEvidenceAt": "2026-11-26T12:26:58Z",
+      "lastEvidenceAt": "2026-11-26T21:49:27Z",
       "startDay": "2026-08-24",
       "dailyMinutesDown": {},
       "uptime": "100.00%",
