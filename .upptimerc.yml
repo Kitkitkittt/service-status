@@ -97,6 +97,10 @@ sites:
     expectedStatusCodes:
       - 200
     timeout: 15000
+    maxRedirects: 0
+    requestTimeout: 15
+    connectTimeout: 10
+    maxRetries: 1
   - name: Langfuse Liveness
     slug: langfuse-liveness
     url: https://langfuse.vnibb.xyz/api/public/health
@@ -115,12 +119,20 @@ sites:
     expectedStatusCodes:
       - 200
     timeout: 15000
+    maxRedirects: 0
+    requestTimeout: 15
+    connectTimeout: 10
+    maxRetries: 1
   - name: Langfuse API Auth Boundary
     slug: langfuse-api-auth-boundary
     url: https://langfuse.vnibb.xyz/api/public/projects
     expectedStatusCodes:
       - 401
     timeout: 15000
+    maxRedirects: 0
+    requestTimeout: 15
+    connectTimeout: 10
+    maxRetries: 1
   - name: Keith Digital Garden
     slug: keith-digital-garden
     url: https://kohnnn.github.io/keith-digital-garden/
@@ -157,7 +169,7 @@ status-website:
   name: VNI Services Status
   themeUrl: https://kitkitkittt.github.io/service-status/openai-status.css?v=status-performance-1
   scripts:
-    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=status-performance-1
+    - src: https://kitkitkittt.github.io/service-status/uptime-bars.js?v=status-performance-3
       async: true
   introTitle: "System status"
   introMessage: Public availability across applications, AI gateways, Grafana and Langfuse. Expected HTTP 401 means an authentication boundary passed. Checks target five-minute intervals; monitoring-evidence age is shown below. Private node, worker and telemetry health require separate authenticated monitoring.

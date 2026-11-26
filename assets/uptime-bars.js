@@ -6,6 +6,7 @@
   const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
   const STALE_AFTER_MS = 20 * 60 * 1000;
   const SNAPSHOT_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/status-data/status.json";
+  const SNAPSHOT_V2_URL = "https://raw.githubusercontent.com/Kitkitkittt/service-status/status-data/status-v2.json";
   const REFRESH_MS = 60000;
 
   function dateKey(date) {
@@ -36,15 +37,35 @@
     }[period] || "90-day history";
   }
 
-  function dayState(day, startDay, summary, today) {
-    if (!startDay || day < startDay) return "unknown";
+  function observedDayState(day, summary, today) {
+    const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
+    // Explicit recorded incident minutes are historical evidence: they win
+    // even when current evidence is absent or older than the observed day.
+    if (minutesDown >= 1440) return "full-outage";
+    if (minutesDown > 0) return "partial-outage";
     // A stopped monitor cannot establish availability on subsequent days.
     const sampled = new Date(summary.lastEvidenceAt || summary.lastUpdated || NaN);
-    if (!Number.isNaN(sampled.getTime()) && day > dateKey(sampled)) return "unknown";
-    const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
-    if (minutesDown >= 1440) return "full-outage";
-    if (minutesDown > 0 || (day === today && summary.status === "down")) return "partial-outage";
-    return "operational";
+    if (Number.isNaN(sampled.getTime()) || day > dateKey(sampled)) return "unknown";
+    if (day === today && summary.status === "down") return "partial-outage";
+    // Upstream calculate-uptime.ts records only incident days: an absent key in
+    // an observed window with an actual summary row is incident-free history.
+    if (summary.uptime !== undefined && summary.uptime !== null) return "operational";
+    return "unknown";
+  }
+
+  function enrolledDayState(day, startDay, summary, today) {
+    // A member is ignored only before its enrollment date or while no startDay
+    // is known, unless it has retained recorded incident history.
+    if (!startDay || day < startDay) {
+      const minutesDown = Number(summary.dailyMinutesDown?.[day] || 0);
+      if (!minutesDown) return null;
+    }
+    return observedDayState(day, summary, today);
+  }
+
+  function dayState(day, startDay, summary, today) {
+    if (!startDay || day < startDay) return "unknown";
+    return observedDayState(day, summary, today);
   }
 
   function aggregateState(states) {
@@ -222,13 +243,22 @@
     return chart;
   }
 
+  function headingHasHistoryLink(check) {
+    // A pending check without a real startDay has no history page to link to.
+    return Boolean(check.startDay);
+  }
+
   function createPerformanceCheck(check, window) {
     const article = element("article", "performance-check");
     const header = element("div", "performance-check__header");
     const heading = element("h4");
-    const link = element("a", "", check.name);
-    link.href = `history/${check.slug}`;
-    heading.append(link);
+    if (headingHasHistoryLink(check)) {
+      const link = element("a", "", check.name);
+      link.href = `history/${check.slug}`;
+      heading.append(link);
+    } else {
+      heading.textContent = check.name;
+    }
     const stats = element("p", "timing-stats", window.count
       ? `${durationLabel(window.mean)} avg · ${window.count} ${window.count === 1 ? "sample" : "samples"}`
       : "No timings in range");
@@ -250,9 +280,13 @@
     const health = Object.hasOwn(HEALTH_LABELS, check.status) ? check.status : "unknown";
     const article = element("article", health);
     const heading = element("h4");
-    const link = element("a", "", check.name);
-    link.href = `history/${check.slug}`;
-    heading.append(link);
+    if (headingHasHistoryLink(check)) {
+      const link = element("a", "", check.name);
+      link.href = `history/${check.slug}`;
+      heading.append(link);
+    } else {
+      heading.textContent = check.name;
+    }
     const freshness = sampleFreshness(check.lastEvidenceAt, now);
     article.dataset.sampleState = freshness;
     const details = element("div", "check-description", check.description);
@@ -286,8 +320,8 @@
       element("strong", "service-group__title", group.title),
       element("span", "service-group__count", `${checks.length} check${checks.length === 1 ? "" : "s"}`),
     );
-    const states = checks.map((check) => statesForSummary(check, check.startDay, days));
-    const combined = days.map((_, index) => aggregateState(states.map((row) => row[index])));
+    const states = checks.map((check) => days.map((day) => enrolledDayState(day, check.startDay, check, days[days.length - 1])));
+    const combined = days.map((_, index) => aggregateState(states.map((row) => row[index]).filter((state) => state !== null)));
     summary.append(identity, element("span", "service-group__status", status.label),
       createBarFromStates(days, combined, `Combined ${periodLabel(period, earliest).toLowerCase()}`));
     const components = element("div", "service-group__components");
@@ -311,13 +345,15 @@
     return details;
   }
 
-  const exported = { aggregateState, buildDays, dayState, groupStatus, incidentFreePercent,
+  const exported = { aggregateState, buildDays, dayState, enrolledDayState, groupStatus, headingHasHistoryLink, incidentFreePercent,
     periodDays, periodLabel, sampleFreshness, timingWindow };
   if (typeof module !== "undefined" && module.exports) module.exports = exported;
   if (typeof document === "undefined") return;
 
   let snapshot;
   let unavailable = false;
+  let adoptedV2 = false;
+  let legacyCoverage = false;
   let renderedSection;
   let renderedPeriod;
   let renderedSnapshot;
@@ -368,12 +404,13 @@
     }
     const incomplete = snapshot?.checks.filter((check) => sampleFreshness(check.lastEvidenceAt, now) !== "fresh").length;
     const message = unavailable
-      ? snapshot ? "Snapshot refresh failed. Showing the last available snapshot." : "Current monitoring snapshot is unavailable. The status below is from the last page build."
+      ? snapshot ? `Snapshot refresh failed. Showing the last available ${legacyCoverage ? "legacy-coverage " : ""}snapshot.` : "Current monitoring snapshot is unavailable. The status below is from the last page build."
       : !snapshot ? "Loading monitoring snapshot…"
+      : legacyCoverage ? "Legacy snapshot coverage: showing the original checks until the full feed is available."
       : view === "performance" ? "Daily averages of recorded successful checks. Gaps indicate days without a timing sample."
       : incomplete ? `${incomplete} of ${snapshot.checks.length} checks have stale or missing evidence. Showing last-known status.`
       : `All ${snapshot.checks.length} checks have monitoring evidence within 20 minutes.`;
-    notice.classList.toggle("monitoring-notice--delayed", Boolean(unavailable || (view === "uptime" && incomplete)));
+    notice.classList.toggle("monitoring-notice--delayed", Boolean(unavailable || legacyCoverage || (view === "uptime" && incomplete)));
     if (notice.textContent !== message) notice.textContent = message;
     if (!snapshot) return;
 
@@ -409,21 +446,91 @@
     section.dataset.view = view;
   }
 
+  function validTimestamp(value) {
+    return typeof value === "string" && !Number.isNaN(Date.parse(value));
+  }
+
+  function validDay(value) {
+    if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const date = new Date(`${value}T00:00:00Z`);
+    return Number.isFinite(date.getTime()) && dateKey(date) === value;
+  }
+
+  function validMonitor(monitor) {
+    return monitor === null || (monitor && Number.isSafeInteger(monitor.runId) &&
+      monitor.runId > 0 && typeof monitor.sourceSha === "string" && /^[a-f0-9]{40}$/.test(monitor.sourceSha) &&
+      (monitor.startedAt === null || validTimestamp(monitor.startedAt)));
+  }
+
+  function validPerformance(performance) {
+    if (!performance || !Array.isArray(performance.days)) return false;
+    if (performance.latestAt !== null && (!validTimestamp(performance.latestAt) ||
+        !Number.isFinite(performance.latestMs) || performance.latestMs <= 0)) return false;
+    return performance.days.every((row) => Array.isArray(row) && row.length === 3 &&
+      validDay(row[0]) && Number.isSafeInteger(row[1]) && row[1] > 0 &&
+      Number.isFinite(row[2]) && row[2] > 0);
+  }
+
+  function validateFeed(next, version) {
+    if (!next || next.schemaVersion !== version || typeof next.sourceSha !== "string" ||
+        !/^[a-f0-9]{40}$/.test(next.sourceSha) || !validMonitor(next.monitor) ||
+        !Array.isArray(next.groups) || !next.groups.length ||
+        !Array.isArray(next.checks) || !next.checks.length) throw new Error("Unsupported status snapshot");
+    const groupIds = new Set();
+    for (const group of next.groups) {
+      if (!group || typeof group.id !== "string" || !group.id || typeof group.title !== "string" || !group.title ||
+          groupIds.has(group.id)) throw new Error("Invalid status group");
+      groupIds.add(group.id);
+    }
+    const slugs = new Set();
+    for (const check of next.checks) {
+      if (!check || typeof check.slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(check.slug) ||
+          typeof check.name !== "string" || !check.name || !groupIds.has(check.group) || slugs.has(check.slug) ||
+          !check.dailyMinutesDown || typeof check.dailyMinutesDown !== "object" ||
+          Array.isArray(check.dailyMinutesDown) || !validPerformance(check.performance)) {
+        throw new Error("Invalid status check");
+      }
+      if (check.lastUpdated !== null && check.lastUpdated !== undefined && !validTimestamp(check.lastUpdated)) {
+        throw new Error("Invalid evidence timestamp");
+      }
+      if (check.lastEvidenceAt !== null && check.lastEvidenceAt !== undefined && !validTimestamp(check.lastEvidenceAt)) {
+        throw new Error("Invalid evidence timestamp");
+      }
+      if (check.startDay != null && !validDay(check.startDay)) throw new Error("Invalid start day");
+      slugs.add(check.slug);
+    }
+    return next;
+  }
+
+  async function fetchFeed(url, version) {
+    const response = await fetch(url, { cache: "no-cache", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error(`Snapshot HTTP ${response.status}`);
+    return validateFeed(await response.json(), version);
+  }
+
+  function useSnapshot(next, full) {
+    // validateFeed already rejected missing provenance and malformed rows.
+    snapshot = next;
+    adoptedV2 = Boolean(full);
+    legacyCoverage = !full;
+  }
+
   async function refresh() {
     if (pending) return;
     pending = true;
     try {
-      const response = await fetch(SNAPSHOT_URL, { cache: "no-cache", signal: AbortSignal.timeout(10000) });
-      if (!response.ok) throw new Error(`Snapshot HTTP ${response.status}`);
-      const next = await response.json();
-      if (next.schemaVersion !== 1 || !Array.isArray(next.groups) || !Array.isArray(next.checks)) {
-        throw new Error("Unsupported status snapshot");
-      }
-      if (snapshot?.sourceSha !== next.sourceSha || snapshot?.monitor?.runId !== next.monitor?.runId) {
-        snapshot = next;
+      if (!adoptedV2) {
+        try {
+          useSnapshot(await fetchFeed(SNAPSHOT_V2_URL, 2), true);
+        } catch {
+          useSnapshot(await fetchFeed(SNAPSHOT_URL, 1), false);
+        }
+      } else {
+        useSnapshot(await fetchFeed(SNAPSHOT_V2_URL, 2), true);
       }
       unavailable = false;
     } catch {
+      // Keep the last good feed; never downgrade after v2 adoption.
       unavailable = true;
     } finally {
       pending = false;
