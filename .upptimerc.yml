@@ -91,6 +91,12 @@ sites:
     expectedStatusCodes:
       - 401
     timeout: 15000
+  - name: Grafana Web UI
+    slug: grafana-web-ui
+    url: https://grafana.vnibb.xyz/login
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
   - name: Langfuse Liveness
     slug: langfuse-liveness
     url: https://langfuse.vnibb.xyz/api/public/health
@@ -102,6 +108,18 @@ sites:
     url: https://langfuse.vnibb.xyz/api/public/ready
     expectedStatusCodes:
       - 200
+    timeout: 15000
+  - name: Langfuse Web UI
+    slug: langfuse-web-ui
+    url: https://langfuse.vnibb.xyz/auth/sign-in
+    expectedStatusCodes:
+      - 200
+    timeout: 15000
+  - name: Langfuse API Auth Boundary
+    slug: langfuse-api-auth-boundary
+    url: https://langfuse.vnibb.xyz/api/public/projects
+    expectedStatusCodes:
+      - 401
     timeout: 15000
   - name: Keith Digital Garden
     slug: keith-digital-garden

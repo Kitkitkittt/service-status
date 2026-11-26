@@ -4,7 +4,7 @@ Reconciled 17 November 2026. This is a coverage inventory, not a live node-healt
 
 <!-- generated public checks -->
 
-The public status page tracks **21 HTTPS checks across 8 groups**.
+The public status page tracks **24 HTTPS checks across 8 groups**.
 
 | Group | Check | Expected HTTP | What it checks |
 | --- | --- | --- | --- |
@@ -22,8 +22,11 @@ The public status page tracks **21 HTTPS checks across 8 groups**.
 | Tele-proxy | Tele-proxy API Auth Boundary | 401 | The models API rejects requests without credentials. |
 | Grafana | Grafana API Health | 200 | The Grafana health handler answers. |
 | Grafana | Grafana API Auth Boundary | 401 | Grafana rejects anonymous access to datasource configuration. |
+| Grafana | Grafana Web UI | 200 | The native Grafana login route answers. |
 | Langfuse | Langfuse Liveness | 200 | The Langfuse listener answers. |
 | Langfuse | Langfuse Readiness | 200 | Langfuse reports its dependencies ready. |
+| Langfuse | Langfuse Web UI | 200 | The native Langfuse sign-in route answers. |
+| Langfuse | Langfuse API Auth Boundary | 401 | Langfuse rejects anonymous access to projects. |
 | Other projects | Keith Digital Garden | 200 | The public knowledge garden responds. |
 | Other projects | Mechanical Watch Explainer | 200 | The interactive watch explainer responds. |
 | Other projects | AutoScientist Write-up | 200 | The public project write-up responds. |
@@ -31,6 +34,8 @@ The public status page tracks **21 HTTPS checks across 8 groups**.
 | Other projects | Chords Lab | 200 | The public music theory app responds. |
 
 <!-- generated public checks -->
+
+Fifteen requested operator-UI/service targets have no live completed public contract here. Status custom-hostname verification and private-origin probes remain gated separately under the respective owners. These rows record only public HTTPS UI-route and anonymous auth-boundary observations; they do not establish authenticated functional acceptance, deployment state, private origin health, or an automatic-observation guarantee. Existing 9Router public checks are reused unchanged.
 
 ## Node coverage
 

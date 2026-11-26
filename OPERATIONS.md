@@ -18,6 +18,8 @@ GitHub-hosted runners can reach public domains only. They cannot observe localho
 
 A liveness check (Wiki `/health/live`, Tele-proxy `/api/health`) proves the process or listener answered; it says nothing about dependencies. A readiness check (Wiki `/health/ready`, Langfuse `/api/public/ready`) tests the application's declared readiness. A protected-route check proves the selected route rejects anonymous requests. None substitutes for another. Tele-proxy's `/api/health` is unconditional; its `/v1/models` check intentionally sends no key. Neither proves inference works.
 
+Grafana `/login` and Langfuse `/auth/sign-in` are public UI-route checks: an anonymous HTTP 200 means the route answered, not that the page rendered or that an authenticated workflow succeeded. The Langfuse `/api/public/projects` HTTP 401 check proves anonymous rejection, not project access or trace readiness. See [Monitoring coverage](COVERAGE.md) for the remaining endpoint gaps.
+
 [COVERAGE.md](COVERAGE.md) records the public/private coverage boundary and all seven expected Node Slots. Do not expose a private service merely to make this public dashboard look complete. The Fabric registry and authenticated telemetry remain authoritative for node resources, workers, private dependencies, backup evidence and admission.
 
 For machine-local diagnosis, run:

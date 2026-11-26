@@ -19,6 +19,11 @@ class StatusDataTest(unittest.TestCase):
             for name in ("history", "contracts"):
                 shutil.copytree(ROOT / name, repo / name)
 
+            existing_sites = {
+                site["slug"]: site
+                for site in yaml.safe_load((repo / ".upptimerc.yml").read_text())["sites"]
+            }
+
             def run(*args):
                 return subprocess.check_output(args, cwd=repo, text=True).strip()
 
@@ -47,8 +52,14 @@ class StatusDataTest(unittest.TestCase):
             sites = yaml.safe_load((repo / ".upptimerc.yml").read_text())["sites"]
             by_slug = {site["slug"]: site for site in sites}
             records = {record["slug"]: record for record in json.loads((repo / "status.json").read_text())["checks"]}
-            self.assertEqual(len(sites), 22)
-            self.assertEqual(by_slug[original_check["slug"]]["name"], original_check["name"])
+            renamed_slug = original_check["slug"]
+            with self.subTest("sync preserves existing checks except the intended rename"):
+                self.assertEqual(
+                    [site for site in sites if site["slug"] != added_slug],
+                    [dict(site, name=original_check["name"]) if slug == renamed_slug else site
+                     for slug, site in existing_sites.items()],
+                )
+            self.assertEqual(by_slug[added_slug]["url"], "https://tele-proxy.vnibb.xyz/status-fixture")
             self.assertEqual((repo / "history/tele-proxy-api-health.yml").read_bytes(), old_history)
             self.assertEqual(records[original_check["slug"]]["group"], "tele-proxy")
             self.assertIsNotNone(records[original_check["slug"]]["startDay"])
