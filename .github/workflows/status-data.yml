@@ -33,7 +33,7 @@ jobs:
           python-version: '3.12'
       - run: python3 -m pip install PyYAML==6.0.3
       - run: python3 scripts/status_data.py check
-      - run: python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json"
+      - run: python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json" --output-v2 "$RUNNER_TEMP/status-v2.json"
       - run: node --test tests/uptime-bars.test.js
       - run: python3 tests/status_data_test.py
 
@@ -77,7 +77,7 @@ jobs:
             fi
             args=(--run "$receipt")
           fi
-          python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json" "${args[@]}"
+          python3 scripts/status_data.py snapshot --output "$RUNNER_TEMP/status.json" --output-v2 "$RUNNER_TEMP/status-v2.json" "${args[@]}"
       - name: Publish snapshot without rebuilding Pages
         run: |
           set -euo pipefail
@@ -92,7 +92,8 @@ jobs:
             git -C "$data" switch --orphan snapshot-output
           fi
           cp "$RUNNER_TEMP/status.json" "$data/status.json"
-          git -C "$data" add status.json
+          cp "$RUNNER_TEMP/status-v2.json" "$data/status-v2.json"
+          git -C "$data" add status.json status-v2.json
           if git -C "$data" diff --cached --quiet; then exit 0; fi
           git -C "$data" -c user.name=github-actions[bot] \
             -c user.email=41898282+github-actions[bot]@users.noreply.github.com \

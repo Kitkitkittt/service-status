@@ -18,6 +18,10 @@ GitHub-hosted runners can reach public domains only. They cannot observe localho
 
 A liveness check (Wiki `/health/live`, Tele-proxy `/api/health`) proves the process or listener answered; it says nothing about dependencies. A readiness check (Wiki `/health/ready`, Langfuse `/api/public/ready`) tests the application's declared readiness. A protected-route check proves the selected route rejects anonymous requests. None substitutes for another. Tele-proxy's `/api/health` is unconditional; its `/v1/models` check intentionally sends no key. Neither proves inference works.
 
+Grafana `/login` and Langfuse `/auth/sign-in` are public UI-route checks: an anonymous HTTP 200 means the route answered, not that the page rendered or that an authenticated workflow succeeded. The Langfuse `/api/public/projects` HTTP 401 check proves anonymous rejection, not project access or trace readiness. See [Monitoring coverage](COVERAGE.md) for the remaining endpoint gaps.
+
+For the three new Grafana/Langfuse slugs only, `maxRedirects: 0` makes the native Upptime v1.46.5 request accept the observed route status without following a redirect. `requestTimeout: 15` and `connectTimeout: 10` are per-request/per-connection seconds; they do not bound the total observation. `maxRetries: 1` sets one inner request attempt per Upptime retry pass; an outer retry loop in the pinned workflow remains under separate review. The legacy `timeout: 15000` milliseconds declaration is retained for this repository's validator and existing contracts; it is not the Upptime transport timeout.
+
 [COVERAGE.md](COVERAGE.md) records the public/private coverage boundary and all seven expected Node Slots. Do not expose a private service merely to make this public dashboard look complete. The Fabric registry and authenticated telemetry remain authoritative for node resources, workers, private dependencies, backup evidence and admission.
 
 For machine-local diagnosis, run:
@@ -32,7 +36,11 @@ Do not add localhost URLs to `.upptimerc.yml`; GitHub Actions would check its ow
 
 ## Status data and publishing
 
-The public status page gets group names, descriptions, check results, history and evidence times from one versioned JSON snapshot. The Status data workflow builds it from one checkout of `master` and a completed Uptime CI run, then publishes it to the `status-data` branch. The browser refreshes that file every minute and retains the last available snapshot if a refresh fails.
+The Status data job publishes two feeds from one snapshot and one monitor receipt. `status.json` is schema 1 with exactly the historical 21 slugs and their existing order, metadata and evidence; an old queued workflow that passes only `--output` still receives this legacy-compatible feed. `--output-v2` is an explicit opt-in that writes `status-v2.json` with every configured row. Both files are staged in one publisher commit. The browser tries schema 2 first; before a valid v2 exists it falls back to schema 1 with an explicit limited-coverage notice. Once v2 is adopted, a failed refresh keeps the last good v2 with the stale/refresh warning and never downgrades. A same-SHA, same-run promotion carries identical evidence into both feeds.
+
+Both projections are public-only. Private #87 origin work remains open: it needs a dedicated protected coverage view or separately reviewed sanitized outcomes. A relay HTTP 200 or an access redirect is never origin health.
+
+The public status page gets group names, descriptions, check results, history and evidence times from these versioned JSON feeds. The Status data workflow builds them from one checkout of `master` and a completed Uptime CI run, then publishes them to the `status-data` branch. The browser refreshes each minute and retains the last available feed if a refresh fails.
 
 Upptime writes history timestamps on status changes and response-time runs. When the same probe contract exists at the latest successful Uptime CI run's commit and there is a saved record for its URL, the snapshot can use the run start as conservative evidence. A warning appears after 20 minutes. A last-known outage remains visible beside its evidence age. Incident-free days are counted from Upptime history.
 

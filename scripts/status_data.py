@@ -16,6 +16,18 @@ SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 FENCE = "<!-- generated public checks -->"
 PROBE_KEYS = ("name", "slug", "url", "expectedStatusCodes", "timeout")
 TIMING_RECEIPT = re.compile(r" is (?:up|degraded) \((\d{3}) in (\d+) ms\) \[skip ci\] \[upptime\]$")
+# Legacy feed membership is fixed at exact master e7cfcf2b. New checks must
+# not alter the v1 contract consumed by older published clients.
+LEGACY_SLUGS = (
+    "vnibb-dashboard", "gampo-simulator", "research-wiki-liveness",
+    "research-wiki-readiness", "research-wiki-application-auth-boundary",
+    "research-wiki-mcp-auth-boundary", "9-router-web-ui", "9-router-api-health",
+    "9-router-api-auth-boundary", "tele-proxy-api-health", "tele-proxy-web-ui",
+    "tele-proxy-api-auth-boundary", "grafana-api-health", "grafana-api-auth-boundary",
+    "langfuse-liveness", "langfuse-readiness", "keith-digital-garden",
+    "mechanical-watch-explainer", "auto-scientist-write-up", "f1-racing-demo",
+    "chords-lab",
+)
 
 
 def require(condition, message):
@@ -197,9 +209,14 @@ def snapshot(sites, metadata, source_sha, run):
             "uptime": row.get("uptime"), "time": row.get("time"),
             "performance": performance_history(source_sha, site, path),
         })
-    return {"schemaVersion": 1, "sourceSha": source_sha,
-            "monitor": {"runId": run["id"], "sourceSha": run["head_sha"], "startedAt": run_time} if run else None,
-            "groups": metadata["groups"], "checks": records}
+    monitor = {"runId": run["id"], "sourceSha": run["head_sha"], "startedAt": run_time} if run else None
+    return {
+        "v1": {"schemaVersion": 1, "sourceSha": source_sha, "monitor": monitor,
+               "groups": metadata["groups"],
+               "checks": [record for record in records if record["slug"] in LEGACY_SLUGS]},
+        "v2": {"schemaVersion": 2, "sourceSha": source_sha, "monitor": monitor,
+               "groups": metadata["groups"], "checks": records},
+    }
 
 
 def main():
@@ -207,6 +224,7 @@ def main():
     parser.add_argument("command", choices=("check", "sync", "snapshot"))
     parser.add_argument("--output", type=Path)
     parser.add_argument("--run", type=Path)
+    parser.add_argument("--output-v2", type=Path)
     args = parser.parse_args()
     sites = load_yaml(CONFIG)["sites"]
     contract = tele_contract()
@@ -224,8 +242,12 @@ def main():
         require(args.output, "--output is required")
         source_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
         run = json.loads(args.run.read_text()) if args.run else None
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(snapshot(sites, metadata, source_sha, run), indent=2) + "\n")
+        feeds = snapshot(sites, metadata, source_sha, run)
+        for path, feed in ((args.output, "v1"), (args.output_v2, "v2")):
+            if not path:
+                continue
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(feeds[feed], indent=2) + "\n")
     print(f"Validated {len(sites)} checks across {len(metadata['groups'])} groups")
 
 
