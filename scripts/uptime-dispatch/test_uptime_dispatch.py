@@ -440,6 +440,11 @@ class DispatchTest(unittest.TestCase):
                     with self.assertRaises(mod.TimerError):
                         mod.read_token(p)
                 p.chmod(0o600)
+                p.write_text("ghp_offline_test_token\n")
+                p.chmod(0o400)
+                CopyStat.st_mode = stat.S_IFREG | 0o400
+                self.assertEqual(mod.read_token(p), "ghp_offline_test_token")
+                p.chmod(0o600)
                 p.write_text("not-supported-prefix")
                 p.chmod(0o400)
                 CopyStat.st_mode = stat.S_IFREG | 0o400
