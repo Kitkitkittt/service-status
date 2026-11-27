@@ -29,7 +29,7 @@ CREDENTIAL_ENV = "STATUS_TIMER_CREDENTIAL"
 CREDENTIAL_NAME = "uptime-token"
 CREDENTIAL_DIRECTORY = "/run/credentials/service-status-uptime-timer.service"
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}")
-TOKEN_PREFIX = ("github_pat_", "gho_", "ghu_", "ghs_", "ghr_")
+TOKEN_PREFIX = ("github_pat_", "ghp_", "gho_", "ghu_", "ghs_", "ghr_")
 MAX_TOKEN_BYTES = 4096
 SLOT = dt.timedelta(minutes=5)
 JITTER_MINIMUM = dt.timedelta(seconds=270)
